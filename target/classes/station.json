@@ -1,0 +1,144 @@
+{
+    "Stations":[
+        {
+            "name": "A",
+            "stopTime": 3,
+            "positionX": 10,
+            "positionY": 25
+        },
+        {
+            "name": "B",
+            "stopTime": 3,
+            "positionX": 19,
+            "positionY": 20
+        },
+        {
+            "name": "C",
+            "stopTime": 5,
+            "positionX": 28,
+            "positionY": 16
+        },
+        {
+            "name": "D",
+            "stopTime": 3,
+            "positionX": 37,
+            "positionY": 19
+        },
+        {
+            "name": "E",
+            "stopTime": 3,
+            "positionX": 43,
+            "positionY": 20
+        },
+        {
+            "name": "F",
+            "stopTime": 3,
+            "positionX": 44,
+            "positionY": 12
+        },
+        {
+            "name": "G",
+            "stopTime": 3,
+            "positionX": 44,
+            "positionY": 5
+        },
+        {
+            "name": "H",
+            "stopTime": 3,
+            "positionX": 7,
+            "positionY": 17
+        },
+        {
+            "name": "I",
+            "stopTime": 3,
+            "positionX": 17,
+            "positionY": 13
+        },
+        {
+            "name": "J",
+            "stopTime": 5,
+            "positionX": 24,
+            "positionY": 11
+        },
+        {
+            "name": "K",
+            "stopTime": 3,
+            "positionX": 29,
+            "positionY": 12
+        },
+        {
+            "name": "L",
+            "stopTime": 3,
+            "positionX": 24,
+            "positionY": 21
+        },
+        {
+            "name": "M",
+            "stopTime": 3,
+            "positionX": 22,
+            "positionY": 30
+        },
+        {
+            "name": "N",
+            "stopTime": 3,
+            "positionX": 7,
+            "positionY": 11
+        },
+        {
+            "name": "O",
+            "stopTime": 3,
+            "positionX": 15,
+            "positionY": 18
+        },
+        {
+            "name": "P",
+            "stopTime": 3,
+            "positionX": 21,
+            "positionY": 24
+        },
+        {
+            "name": "Q",
+            "stopTime": 3,
+            "positionX": 27,
+            "positionY": 24
+        },
+        {
+            "name": "R",
+            "stopTime": 3,
+            "positionX": 41,
+            "positionY": 23
+        },
+        {
+            "name": "S",
+            "stopTime": 3,
+            "positionX": 10,
+            "positionY": 3
+        },
+        {
+            "name": "T",
+            "stopTime": 3,
+            "positionX": 22,
+            "positionY": 4
+        },
+        {
+            "name": "U",
+            "stopTime": 3,
+            "positionX": 24,
+            "positionY": 15
+        },
+        {
+            "name": "V",
+            "stopTime": 3,
+            "positionX": 32,
+            "positionY": 25
+        },
+        {
+            "name": "W",
+            "stopTime": 3,
+            "positionX": 33,
+            "positionY": 30
+        }
+    
+        
+    ]
+}
