@@ -14,5 +14,11 @@ public class PlanTest {
         float initialY = 16;
         Station stationNearest = p.getNearestStation(initialX, initialY);
         assertThat(stationNearest.getName()).isEqualTo("H");
+
+        initialX = 30;
+        initialY = 29;
+
+        stationNearest = p.getNearestStation(initialX, initialY);
+        assertThat(stationNearest.getName()).isEqualTo("W");
     }
 }
