@@ -80,7 +80,7 @@
                         "travelTime" : 11
                     }, 
                     {
-                        "startStation" : "0",
+                        "startStation" : "O",
                         "endStation" : "P", 
                         "travelTime" : 8
                     },
