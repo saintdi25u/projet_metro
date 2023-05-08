@@ -4,11 +4,13 @@ public class LineFragmentation {
 	private int time;
 	private Station startStation;
 	private Station endStation;
-	public LineFragmentation(int time, Station startStation, Station endStation) {
+	private Double distance;
+	public LineFragmentation(int time, Station startStation, Station endStation, double distance) {
 		super();
 		this.time = time;
 		this.startStation = startStation;
 		this.endStation = endStation;
+		this.distance = distance;
 	}
 	public int getTime() {
 		return time;
@@ -31,7 +33,13 @@ public class LineFragmentation {
 	@Override
 	public String toString() {
 		return "LineFragmentation [time=" + time + ", startStation=" + startStation + ", endStation=" + endStation
-				+ "]";
+				+ ", distance=" + distance + "]";
+	}
+	public Double getDistance() {
+		return distance;
+	}
+	public void setDistance(Double distance) {
+		this.distance = distance;
 	}
 	
 	

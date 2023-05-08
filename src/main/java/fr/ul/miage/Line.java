@@ -24,7 +24,7 @@ public class Line {
 	}
 	@Override
 	public String toString() {
-		return "Line [fragements=" + fragements + ", numLine=" + numLine + "]";
+		return "Line [fragements=" + fragements + ", numLine=" + numLine + "]\n";
 	}
 	
 	
