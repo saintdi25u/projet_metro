@@ -25,15 +25,15 @@ public class App
 //    	}
     	
     	
-    	for (int i = 0; i < p.getArcs().size(); i++) {
-			System.out.println(p.getArcs().get(i).getDistance() + "  "+p.getArcs().get(i).getStartStation().getName() + "  "+p.getArcs().get(i).getEndStation().getName() + "  ");
-		}
+//    	for (int i = 0; i < p.getArcs().size(); i++) {
+//			System.out.println(p.getArcs().get(i).getDistance() + "  "+p.getArcs().get(i).getStartStation().getName() + "  "+p.getArcs().get(i).getEndStation().getName() + "  ");
+//		}
 			
-       	ArrayList<String> paths = p.starA("T", "V");
+       	ArrayList<String> paths = p.starA("J", "D");
     	for(String s :paths ) {
     		System.out.println(s+"\n");
     	}
-			
+     	p.shapingPaths(paths);	
 		
     	
     }

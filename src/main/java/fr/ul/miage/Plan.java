@@ -284,7 +284,6 @@ public class Plan {
 			for(Station s : reachableStations.get(currentNode)) {
 				if (!traversedNode.contains(s.getName())) {
 					double heuristic = distanceAVoleDOiseau.get(s.getName()) + distanceWhithStartStaion(startStationName, s.getName());
-					System.out.println(heuristic);
 					father.put(s.getName(), currentNode);
 					pile.put(s.getName(), heuristic);
 				}
@@ -315,6 +314,88 @@ public class Plan {
 
 	}	
 	
+	public void shapingPaths(ArrayList<String> path) {
+		ArrayList<Integer> numLines = new ArrayList<>();
+		ArrayList<ArrayList<String>> transformPath = new ArrayList<>();
+		
+		for (int i = 0; i < path.size()-1; i++) {
+			for(Line line : this.lines) {
+				for(LineFragmentation lineFrag : line.getFragements()) {
+					if (path.get(i).equals(lineFrag.getStartStation().getName()) && path.get(i+1).equals(lineFrag.getEndStation().getName())) {
+						ArrayList<String> stationsGoodOrder = new ArrayList<>();
+						stationsGoodOrder.add(path.get(i));
+						stationsGoodOrder.add(path.get(i+1));
+						
+						
+						transformPath.add(stationsGoodOrder);
+						numLines.add(line.getNumLine());
+					}
+					if (path.get(i+1).equals(lineFrag.getStartStation().getName()) && path.get(i).equals(lineFrag.getEndStation().getName())) {
+						ArrayList<String> stationsNewOrder = new ArrayList<>();
+						stationsNewOrder.add(path.get(i));
+						stationsNewOrder.add(path.get(i+1));						
+
+						
+						transformPath.add(stationsNewOrder);
+						numLines.add(line.getNumLine());
+					}
+				}
+			}
+		}
+		
+		ArrayList<Integer>finalNumLine = new ArrayList<>();
+		ArrayList<ArrayList<String>> finalTransformPath = new ArrayList<>();
+		System.out.println();
+		for (int i = 0; i < numLines.size(); i++) {
+			ArrayList<String> startStop = new ArrayList<>();
+			
+			String start = transformPath.get(i).get(0);
+			String end = transformPath.get(i).get(1);
+			
+			int num = numLines.get(i);
+		//traiter le cas ou il y a qu'une seul ligne
+			if(sameElementAtEachPosition(numLines)) {
+				end = transformPath.get(numLines.size()-1).get(1);
+				i = numLines.size();
+			}else {
+				if (i+1 != numLines.size()) {
+					while(numLines.get(i) == numLines.get(i+1)) {
+					    end = transformPath.get(i+1).get(1);
+						i++;
+					}				
+				}	
+			}
+					
+			startStop.add(start);
+			startStop.add(end);
+			finalTransformPath.add(startStop);
+			finalNumLine.add(num);
+			
+			
+		}
+		
+		for (int i = 0; i < finalNumLine.size(); i++) {
+			System.out.println(finalNumLine.get(i)+" : "+finalTransformPath.get(i).get(0)+" "+finalTransformPath.get(i).get(1) );
+		}
+		
+		
+	}
+	public boolean sameElementAtEachPosition(ArrayList<Integer> list) {
+	    if (list == null || list.isEmpty()) {
+	        return false;
+	    }
+
+	    Integer firstElement = list.get(0);
+
+	    for (int i = 1; i < list.size(); i++) {
+	        if (!list.get(i).equals(firstElement)) {
+	            return false;
+	        }
+	    }
+
+	    return true;
+	}
+
 
 	
 
