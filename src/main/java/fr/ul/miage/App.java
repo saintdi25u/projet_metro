@@ -29,7 +29,7 @@ public class App
 //			System.out.println(p.getArcs().get(i).getDistance() + "  "+p.getArcs().get(i).getStartStation().getName() + "  "+p.getArcs().get(i).getEndStation().getName() + "  ");
 //		}
 			
-       	ArrayList<String> paths = p.starA("J", "D");
+       	ArrayList<String> paths = p.starA("V", "T");
     	for(String s :paths ) {
     		System.out.println(s+"\n");
     	}

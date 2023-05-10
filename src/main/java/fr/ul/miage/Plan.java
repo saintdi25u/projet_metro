@@ -123,8 +123,12 @@ public class Plan {
 	public String toString() {
 		return "Plan [lines=" + lines + "]";
 	}
-	
-	public HashMap<String, Double> distanceAVoleDOiseau(String nameStation){
+	/**
+	 * Méthode qui calcule les distances à vole d'oiseau entre toutes les stations et la station d'arriver
+	 * @param nameStation : nom de la station d'arrivé
+	 * @return : une HashMap contenant en cle les noms des station du réseau et en valeurs la distance à vole d'oiseau avec la station d'arrivé.
+	 */
+	public HashMap<String, Double> distanceAFlightBird(String nameStation){
 		HashMap<String, Double> map = new HashMap<>();
 		Station end = null;
 		for (int i = 0; i <  this.noeuds.size(); i++) {
@@ -140,7 +144,10 @@ public class Plan {
 		return map;
 
 	}
-	
+	/**
+	 * Méthode qui détermine l'ensemble des stations pouvant être atteinte directement depuis chaque stations en parcourant un seul fragment de ligne
+	 * @return HashMap contenant en cle les noms des stations et en valeurs une liste renseignant les stations ateignables.
+	 */
 	public HashMap<String, ArrayList<Station>> reachableStations(){
 		HashMap<String, ArrayList<Station>> map = new HashMap<>();
 		
@@ -163,7 +170,11 @@ public class Plan {
 		
 		return map;
 	}
-	
+	/**
+	 * Méthode qui permet de trier par ordre décroissant une HashMap et de supprimer ses doublons. 
+	 * @param map : pile utilisé dans l'algorithme a*
+	 * @return : retourne une HashMap correspondant à la pile pris en entré trié avec les doublons supprimé.
+	 */
 	public HashMap<String, Double> pileSort(HashMap<String, Double> map) {
 	    List<Map.Entry<String, Double>> triage = new ArrayList<>(map.entrySet());
 	    triage.sort(Collections.reverseOrder(Map.Entry.<String, Double>comparingByValue()));
@@ -182,6 +193,11 @@ public class Plan {
 	    return mapSort;
 	}
 	
+	/**
+	 * Méthode qui permet de récupérer la dernière cle d'une HashMap
+	 * @param map : HashMap correspondant à la pile utilisé dans l'algorithme a*
+	 * @return : la dernière cle de la HashMap pris en entrée.
+	 */
 	public String lastKeyInTheMap(HashMap<String, Double> map) {
 		String lastKey = "";
 		for (String cle : map.keySet()) {
@@ -191,6 +207,13 @@ public class Plan {
 		
 	}
 	
+
+	/**
+	 * Méthode permet de déterminer tous les chemins possibles entre deux stations.
+	 * @param startStation : la station de départ
+	 * @param endStation : la station d'arrivé
+	 * @return : retourne une liste de liste de String représentant tous les chemins entre les deux stations
+	 */
 	public ArrayList<ArrayList<String>> pathsBetweenTwoStation(String startStation, String endStation) {
 		HashMap<String, ArrayList<Station>> reachableStations = reachableStations();
 		ArrayList<ArrayList<String>> paths = new ArrayList<>();
@@ -201,7 +224,15 @@ public class Plan {
 
 	    return paths;
 	}
-
+	
+	/**
+	 * Méthode quoi effectue une vérification récursive pour trouver tous les chemins possibles entre deux stations.
+	 * @param reachableStations : HashMap contenant les stations atteignables depuis chaque station
+	 * @param currentStation : station actuelle
+	 * @param endStation : station d'arrivée
+	 * @param paths : liste des chemins déjà trouvés 
+	 * @param currentPath : chemin actuel en cours de construction
+	 */
 	private void recursiveCheck(HashMap<String, ArrayList<Station>> reachableStations, String currentStation, String endStation, ArrayList<ArrayList<String>> paths, ArrayList<String> currentPath) {
 	    if (currentStation.equals(endStation)) {
 	        paths.add(new ArrayList<>(currentPath));
@@ -216,7 +247,12 @@ public class Plan {
 	        }
 	    }
 	}
-	
+	/**
+	 * Calcule la distance entre la station de départ et une autre station.
+	 * @param startStation : station de départ
+	 * @param currentStation : autre station 
+	 * @return : retourne la plus courte distance entre la station de départ et la station actuelle
+	 */
 	public Double distanceWhithStartStaion(String startStation, String currentStation){		
 		ArrayList<ArrayList<String>> paths = pathsBetweenTwoStation(startStation, currentStation);
 		ArrayList<Double> distancePaths = new ArrayList<>();
@@ -252,6 +288,12 @@ public class Plan {
 		
 	}
 	
+	/**
+	 * Méthode permettant de determiner le chemin le plus cours entre deux station en utilisant l'algorithme a*
+	 * @param startStationName : nom de la station de départ
+	 * @param endStationName : nom de la station d'arrivée
+	 * @return : retourne une liste de string contenant l'un après l'autres tous les noms des station qui compose le chemin le plus court
+	 */
 	public ArrayList<String> starA(String startStationName, String endStationName){
 		ArrayList<String> betterPath = new ArrayList<>();
 		HashMap<String, Double> pile = new HashMap<>();
@@ -259,7 +301,7 @@ public class Plan {
 		HashMap<String, String> father = new HashMap<>();
 		
 		HashMap<String, ArrayList<Station>> reachableStations = reachableStations();
-		HashMap<String, Double> distanceAVoleDOiseau = distanceAVoleDOiseau(endStationName);
+		HashMap<String, Double> distanceAVoleDOiseau = distanceAFlightBird(endStationName);
 		
 		
 		HashMap<String, Station> node = new HashMap<>();
@@ -314,6 +356,31 @@ public class Plan {
 
 	}	
 	
+	/**
+	 * Méthode permettant de tester si chaques élément d'une liste est le même ou non
+	 * @param list : liste à tester
+	 * @return : true si tout les elements de la liste sont identique, false sinon
+	 */
+	public boolean sameElementAtEachPosition(ArrayList<Integer> list) {
+	    if (list == null || list.isEmpty()) {
+	        return false;
+	    }
+
+	    Integer firstElement = list.get(0);
+
+	    for (int i = 1; i < list.size(); i++) {
+	        if (!list.get(i).equals(firstElement)) {
+	            return false;
+	        }
+	    }
+
+	    return true;
+	}
+	
+	/**
+	 * Méhtode permettant de mettre en forme un chemin pour connaitre de quelle station il faut prendre et sur quelle lignes 
+	 * @param path : chemin à mettre en forme
+	 */
 	public void shapingPaths(ArrayList<String> path) {
 		ArrayList<Integer> numLines = new ArrayList<>();
 		ArrayList<ArrayList<String>> transformPath = new ArrayList<>();
@@ -380,21 +447,8 @@ public class Plan {
 		
 		
 	}
-	public boolean sameElementAtEachPosition(ArrayList<Integer> list) {
-	    if (list == null || list.isEmpty()) {
-	        return false;
-	    }
-
-	    Integer firstElement = list.get(0);
-
-	    for (int i = 1; i < list.size(); i++) {
-	        if (!list.get(i).equals(firstElement)) {
-	            return false;
-	        }
-	    }
-
-	    return true;
-	}
+	
+	
 
 
 	
