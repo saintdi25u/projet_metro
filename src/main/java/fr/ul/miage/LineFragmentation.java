@@ -10,7 +10,7 @@ public class LineFragmentation {
 		this.time = time;
 		this.startStation = startStation;
 		this.endStation = endStation;
-		this.distance = distance;
+		this.distance = distance;   
 	}
 	public int getTime() {
 		return time;

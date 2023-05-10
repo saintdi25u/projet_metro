@@ -134,11 +134,14 @@ public class Plan {
 	 */
 	public HashMap<String, Double> distanceAFlightBird(String nameStation){
 		HashMap<String, Double> map = new HashMap<>();
-		Station end = null;
+		Station end = null;   
 		for (int i = 0; i <  this.noeuds.size(); i++) {
 			if (this.noeuds.get(i).getName().equals(nameStation)) {
 				end = this.noeuds.get(i);
 			}
+		} 
+		if(end == null) {
+			return null;
 		}
 		for (int i = 0; i < this.noeuds.size(); i++) {
 			double dx = end.getPositionX() - this.noeuds.get(i).getPositionX();

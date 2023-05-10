@@ -20,7 +20,7 @@ public class Line {
 		return numLine;
 	}
 	public void setNumLine(int numLine) {
-		this.numLine = numLine;
+		this.numLine = numLine; 
 	}
 	@Override
 	public String toString() {

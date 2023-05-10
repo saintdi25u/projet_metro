@@ -9,10 +9,10 @@ public class Station {
 		super();
 		this.stopTime = stopTime;
 		this.positionX = positionX;
-		this.positionY = positionY;
+		this.positionY = positionY; 
 		this.name = name;
 	}
-	public int getStopTime() {
+	public int getStopTime() { 
 		return stopTime;
 	}
 	public void setStopTime(int stopTime) {
