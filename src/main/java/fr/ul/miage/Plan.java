@@ -21,6 +21,10 @@ public class Plan {
 	private ArrayList<LineFragmentation> arcs = new ArrayList<>();
 	private ArrayList<Station> noeuds = new ArrayList<>();
 	
+	/**
+	 * Constructeur du plan. 
+	 * Il permet de récupérer les données des fichiers line.json et station.json, pour créer un graphe en utilisant les object Station, LineFragmentation et Line.
+	 */
 	public Plan() {
 		 String filePathLine = "src/main/resources/line.json";
 		 String filePathStation = "src/main/resources/station.json";
