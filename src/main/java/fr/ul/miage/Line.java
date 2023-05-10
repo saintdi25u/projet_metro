@@ -25,7 +25,7 @@ public class Line {
 	}
 
 	public void setNumLine(int numLine) {
-		this.numLine = numLine;
+		this.numLine = numLine; 
 	}
 
 	@Override

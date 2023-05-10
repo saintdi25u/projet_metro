@@ -14,15 +14,33 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
     <maven.compiler.source>1.7</maven.compiler.source>
     <maven.compiler.target>1.7</maven.compiler.target>
     <assertj.version>3.24.2</assertj.version>
     <junit.version>5.9.2</junit.version>
     <mockito.version>5.1.1</mockito.version>
+
+    <java.version>17</java.version>
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
+
     <jacoco.version>0.8.8</jacoco.version>
   </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.11</version>
+      <scope>test</scope>
+    </dependency>
+	<dependency>
+	    <groupId>org.junit.jupiter</groupId>
+	    <artifactId>junit-jupiter-api</artifactId>
+	    <version>5.9.3</version>
+	    <scope>test</scope>
+	</dependency>
     <dependency>
 	 <groupId>org.json</groupId>
 	 <artifactId>json</artifactId>
@@ -59,6 +77,25 @@
             <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
+	<dependency>
+	    <groupId>org.mockito</groupId>
+	    <artifactId>mockito-core</artifactId>
+	    <version>5.3.1</version>
+	    <scope>test</scope>
+	</dependency>
+	
+<dependency>
+    <groupId>org.mockito</groupId>
+    <artifactId>mockito-junit-jupiter</artifactId>
+    <version>5.3.1</version>
+    <scope>test</scope>
+</dependency>
+<dependency>
+    <groupId>org.assertj</groupId>
+    <artifactId>assertj-core</artifactId>
+    <version>3.24.2</version>
+    <scope>test</scope>
+</dependency>
   </dependencies>
 
   <build>
@@ -145,7 +182,6 @@
                     </execution>
                 </executions>
             </plugin>
-
       </plugins>
     </pluginManagement>
   </build>	

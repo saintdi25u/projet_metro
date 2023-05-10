@@ -106,8 +106,13 @@
                     }, 
                     {
                         "startStation" : "T",
+                        "endStation" : "J", 
+                        "travelTime" : 8
+                    },
+                    {
+                        "startStation" : "J",
                         "endStation" : "U", 
-                        "travelTime" : 16
+                        "travelTime" : 8
                     },
                     {
                         "startStation" : "U",
