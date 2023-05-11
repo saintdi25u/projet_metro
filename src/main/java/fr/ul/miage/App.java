@@ -10,7 +10,10 @@ import java.util.Scanner;
 
 public class App 
 {
-
+	/**
+	 * Fonction qui gère le menu générale de l'application
+	 * @param p Plan du métro
+	 */
 	public void menu(Plan p){
 		Scanner s = new Scanner(System.in);
 		System.out.println("Bienvenue dans l'application");
@@ -42,6 +45,11 @@ public class App
 		}
 	}
 
+	/**
+	 * Fonction qui gère le menu administrateur de l'application
+	 * @param s Scanner pour lire les lignes de commandes de l'utilisateur
+	 * @param p Plan du métro
+	 */
 	public void menuUtil(Scanner s, Plan p){
 		ControllerCommand c = new ControllerCommand();
 		System.out.println("Bienvenue dans le menu utilisateur de l'application");
@@ -66,6 +74,11 @@ public class App
 		}
 	}
 
+	/**
+	 * Fonction qui gère le menu utilisateur de l'application
+	 * @param s Scanner pour lire les lignes de commandes de l'utilisateur
+	 * @param p Plan du métro
+	 */
 	public void menuAdmin(Scanner s, Plan p){
 		ControllerCommand c = new ControllerCommand();
 		System.out.println("Bienvenue dans le menu administrateur de l'application");

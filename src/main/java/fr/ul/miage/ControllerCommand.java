@@ -4,6 +4,11 @@ import java.util.Scanner;
 
 public class ControllerCommand {
 
+    /**
+     * Fonction qui permet de créer un incident avec les interactions utilisateurs
+     * @param s Scanner pour lire les commandes utilisateurs
+     * @return un Incident
+     */
     public Incident createIncident(Scanner s){
         System.out.println("Quelle est la rasion de l'incident ?");
         String reason = s.nextLine();
@@ -11,6 +16,11 @@ public class ControllerCommand {
         return incident;
     }
 
+    /**
+     * Fonction qui permet de créer un incident sur une station avec les interactions utilisateurs
+     * @param s Scanner pour lire les commandes utilisateurs
+     * @param plan Plan du métro
+     */
     public void initStationIncident(Scanner s, Plan plan){
         Incident incident = createIncident(s);
         System.out.println("Sur quelle station est l'incident ?");
@@ -35,6 +45,11 @@ public class ControllerCommand {
         
     }
 
+    /**
+     * Fonction qui permet de créer un incident sur un fraguemùent de ligne avec les interactions utilisateurs
+     * @param s Scanner pour lire les commandes utilisateurs
+     * @param plan Plan du métro
+     */
     public void initFragLigneIncident(Scanner s, Plan plan) {
         Incident incident = createIncident(s);
         System.out.println("Sur quelle fraguement de ligne est l'incident ?");
