@@ -1,6 +1,7 @@
 package fr.ul.miage;
 
 public class LineFragmentation {
+	private String name;
 	private int time;
 	private Station startStation;
 	private Station endStation;
@@ -9,6 +10,7 @@ public class LineFragmentation {
 	public LineFragmentation(int time, Station startStation, Station endStation, double distance) {
 		super();
 		this.time = time;
+		this.name = startStation.getName().toUpperCase()+endStation.getName().toUpperCase();
 		this.startStation = startStation;
 		this.endStation = endStation;
 		this.distance = distance;
@@ -46,6 +48,9 @@ public class LineFragmentation {
 	public void setIncident(Incident incident){
 		this.incident = incident;
 	}
+	public void setName(String name) {
+		this.name = name;
+	}
 	public Incident getIncident() {
 		return incident;
 	}
@@ -56,6 +61,9 @@ public class LineFragmentation {
 		if(incident != null){
 			this.incident = null;
 		}
+	}
+	public String getName() {
+		return name;
 	}
 	
 	
