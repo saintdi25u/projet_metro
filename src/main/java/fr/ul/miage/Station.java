@@ -5,12 +5,15 @@ public class Station {
 	private float positionX;
 	private float positionY;
 	private String name;
+	private Incident incident;
+	
 	public Station(int stopTime, float positionX, float positionY, String name) {
 		super();
 		this.stopTime = stopTime;
 		this.positionX = positionX;
 		this.positionY = positionY; 
 		this.name = name;
+		this.incident = null;
 	}
 	public int getStopTime() { 
 		return stopTime;
@@ -35,6 +38,20 @@ public class Station {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public void setIncident(Incident incident){
+		this.incident = incident;
+	}
+	public Incident getIncident() {
+		return incident;
+	}
+	/**
+	 * Cette méthode permet de supprimer un incident sur la station
+	 */
+	public void removeIncident() {
+		if(incident != null){
+			this.incident = null;
+		}
 	}
 	@Override
 	public String toString() {

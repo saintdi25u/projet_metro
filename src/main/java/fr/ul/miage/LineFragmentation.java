@@ -5,12 +5,14 @@ public class LineFragmentation {
 	private Station startStation;
 	private Station endStation;
 	private Double distance;
+	private Incident incident;
 	public LineFragmentation(int time, Station startStation, Station endStation, double distance) {
 		super();
 		this.time = time;
 		this.startStation = startStation;
 		this.endStation = endStation;
-		this.distance = distance;   
+		this.distance = distance;
+		this.incident = null; 
 	}
 	public int getTime() {
 		return time;
@@ -41,7 +43,20 @@ public class LineFragmentation {
 	public void setDistance(Double distance) {
 		this.distance = distance;
 	}
-	
+	public void setIncident(Incident incident){
+		this.incident = incident;
+	}
+	public Incident getIncident() {
+		return incident;
+	}
+	/**
+	 * Cette méthode permet de supprimer un incident sur le fragment de ligne
+	 */
+	public void removeIncident() {
+		if(incident != null){
+			this.incident = null;
+		}
+	}
 	
 	
 }

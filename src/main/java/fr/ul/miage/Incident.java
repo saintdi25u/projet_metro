@@ -2,11 +2,9 @@ package fr.ul.miage;
 
 public class Incident {
     private String reasonOfIncident;
-    private int duration;
 
-    public Incident(String reasonOfIncident, int duration) {
+    public Incident(String reasonOfIncident) {
         this.reasonOfIncident = reasonOfIncident;
-        this.duration = duration;
     }
 
     public String getReasonOfIncident() {
@@ -15,12 +13,9 @@ public class Incident {
     public void setReasonOfIncident(String reasonOfIncident) {
         this.reasonOfIncident = reasonOfIncident;
     }
-    public int getDuration() {
-        return duration;
-    }
-    public void setDuration(int duration) {
-        this.duration = duration;
+    @Override
+    public String toString() {
+        return "Raison de l'incident : " + reasonOfIncident;
     }
 
-    
 }
