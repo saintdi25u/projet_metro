@@ -1,6 +1,5 @@
 package fr.ul.miage;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -10,6 +9,16 @@ import java.util.Scanner;
 
 public class App 
 {
+	private String preference = "rapide";
+
+	public String getPreference() {
+		return preference;
+	}
+
+	public void setPreference(String preference) {
+		this.preference = preference;
+	}
+
 	/**
 	 * Fonction qui gère le menu générale de l'application
 	 * @param p Plan du métro
@@ -58,6 +67,9 @@ public class App
 			System.out.println("Si vous souhaitez sortir du menu utilisateur, taper 3");try {
 				int choix = Integer.parseInt(s.nextLine());
 				switch(choix){
+					case 1:
+						System.out.println("Saisir vos preferences de trajet");
+						setPreference(c.saisiPreference(s));
 					case 3:
 						admin = false;
 						System.out.println("Vous quittez le menu utilisateur");

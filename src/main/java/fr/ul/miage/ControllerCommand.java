@@ -72,4 +72,33 @@ public class ControllerCommand {
             System.out.println("Incident créé avec succès sur le fraguement de ligne " + res.getName());
         }
     }
+
+    public String saisiPreference(Scanner s) {
+        String preference = "";
+        System.out.println("Voici les choix de preference qui s'offrent à vous : \n");
+        System.out.println("Taper 1 pour chercher les itineraires les plus rapides\n");
+        System.out.println("Taper 2 pour chercher les itineraires avec le moins de changement de ligne\n");
+        int choix = 0;
+        try {
+            choix = s.nextInt();
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.out.println("Veuillez ne saisir que des chiffres pour les choix de préférences\n");
+            saisiPreference(s);
+        }
+        switch (choix) {
+            case 1:
+                preference = "rapide";
+                break;
+            case 2:
+                preference = "changement";
+                break;
+            default:
+                System.out.println("Veuillez saisir un nombre de la liste\n");
+                saisiPreference(s);
+                break;
+        }
+        System.out.println("Vos choix ont été sauvegardés avec succès !");
+        return preference;
+    }
 }
