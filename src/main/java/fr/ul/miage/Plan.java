@@ -29,8 +29,8 @@ public class Plan {
 	 */
 
 	public Plan() {
-		 String filePathLine = "src/main/resources/line.json";
-		 String filePathStation = "src/main/resources/station.json";
+		 String filePathLine = "samples/line.json";
+		 String filePathStation = "samples/station.json";
 	     		 
 	     String contentLine = null;
 	     String contentStation = null;
