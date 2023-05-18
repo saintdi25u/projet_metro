@@ -56,8 +56,9 @@ public class Station {
 	@Override
 	public String toString() {
 		return "Station [stopTime=" + stopTime + ", positionX=" + positionX + ", positionY=" + positionY + ", name="
-				+ name + "]";
+				+ name + ", incident=" + incident + "]";
 	}
+	
 	
 	
 }	

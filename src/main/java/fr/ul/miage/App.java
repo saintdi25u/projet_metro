@@ -133,14 +133,16 @@ public class App
     	/*
 		App app = new App();
 		app.menu(p);
-		
-    	/*
-       	ArrayList<String> paths = p.starA("V", "T");
+		 */	
+    	Incident i = new Incident("test");
+    	p.getNoeuds().get("U").setIncident(i);
+    	p.getArcs().get("JU").setIncident(i);
+       	ArrayList<String> paths = p.starA("T", "V");
     	for(String s :paths ) {
     		System.out.println(s+"\n");  
     	}
      	p.shapingPaths(paths);	
-		 */	
+		
 
     }
 }

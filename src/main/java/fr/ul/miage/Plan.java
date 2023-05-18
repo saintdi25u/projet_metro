@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class Plan {
-	private ArrayList<Line> line = new ArrayList<>();
 	private HashMap<String, Line> lines = new HashMap<>();
 	private HashMap<String, LineFragmentation> arcs = new HashMap<>();
 	private HashMap<String, Station> noeuds = new HashMap<>();
@@ -211,20 +211,29 @@ public class Plan {
 		HashMap<String, ArrayList<Station>> map = new HashMap<>();
 						
 		for (String keyNoeud : this.noeuds.keySet()) {
-			ArrayList<Station> reachStations = new ArrayList<>();
-		    for(String keyLineF : this.arcs.keySet()) {		 
-		    	if (arcs.get(keyLineF).getStartStation().getName().equals(noeuds.get(keyNoeud).getName())) {
-		    		reachStations.add(arcs.get(keyLineF).getEndStation());		    		
-				}
-		    	if (arcs.get(keyLineF).getEndStation().getName().equals(noeuds.get(keyNoeud).getName())) {
-		    		reachStations.add(arcs.get(keyLineF).getStartStation());
-				}
-		    }
-		    HashSet<Station> supDoublons = new HashSet<>(reachStations);
-		    reachStations = new ArrayList<>(supDoublons);
+			ArrayList<Station> reachStations = new ArrayList<>();			   				
+				for(String keyLineF : this.arcs.keySet()) {
+					if (this.arcs.get(keyLineF).getIncident()==null) {						
+
+						if (this.arcs.get(keyLineF).getStartStation().getName().equals(this.noeuds.get(keyNoeud).getName())) {
+							if (this.arcs.get(keyLineF).getEndStation().getIncident()==null) {
+								reachStations.add(this.arcs.get(keyLineF).getEndStation());
+							}
+				    				    		
+						}
+				    	if (this.arcs.get(keyLineF).getEndStation().getName().equals(this.noeuds.get(keyNoeud).getName())) {
+							if (this.arcs.get(keyLineF).getStartStation().getIncident()==null) {
+					    		reachStations.add(this.arcs.get(keyLineF).getStartStation());
+							}
+						}
+					}			    	
+			    }
+			    HashSet<Station> supDoublons = new HashSet<>(reachStations);
+			    reachStations = new ArrayList<>(supDoublons);  
+			    map.put(noeuds.get(keyNoeud).getName(), reachStations);
+			}
 		    
-		    map.put(noeuds.get(keyNoeud).getName(), reachStations);
-		}
+		
 		
 		
 		return map;
@@ -358,7 +367,7 @@ public class Plan {
 		HashMap<String, Double> pile = new HashMap<>();
 		ArrayList<String> traversedNode = new ArrayList<>();
 		HashMap<String, String> father = new HashMap<>();
-		
+		majLignesFragmentation();
 		HashMap<String, ArrayList<Station>> reachableStations = reachableStations();
 		HashMap<String, Double> distanceAVoleDOiseau = distanceAFlightBird(endStationName);
 		
@@ -479,15 +488,17 @@ public class Plan {
 			String end = transformPath.get(i).get(1);
 			
 			int num = numLines.get(i);
-		//traiter le cas ou il y a qu'une seul ligne
 			if(sameElementAtEachPosition(numLines)) {
 				end = transformPath.get(numLines.size()-1).get(1);
 				i = numLines.size();
 			}else {
 				if (i+1 != numLines.size()) {
 					while(numLines.get(i) == numLines.get(i+1)) {
-					    end = transformPath.get(i+1).get(1);
-						i++;
+						    end = transformPath.get(i+1).get(1);
+							i++;
+						if (i+1 == numLines.size()) {
+							break;
+						}
 					}				
 				}	
 			}
@@ -505,6 +516,15 @@ public class Plan {
 		}
 		
 		
+	}
+	
+	public void majLignesFragmentation() {
+		for (String keyLine : this.arcs.keySet()) {
+			this.arcs.get(keyLine).setStartStation(this.noeuds.get(this.arcs.get(keyLine).getStartStation().getName()));
+			this.arcs.get(keyLine).setEndStation(this.noeuds.get(this.arcs.get(keyLine).getEndStation().getName()));
+
+
+		}
 	}
 	
 	

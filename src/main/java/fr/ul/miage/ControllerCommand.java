@@ -29,9 +29,9 @@ public class ControllerCommand {
         String station = s.nextLine();
         boolean trouve = false;
         Station res = null;
-        for (Station st : plan.getNoeuds()) {
-            if (st.getName().contains(station.toUpperCase())) {
-                res = st;
+        for (String st : plan.getNoeuds().keySet()) {
+            if (plan.getNoeuds().get(st).getName().contains(station.toUpperCase())) {
+                res = plan.getNoeuds().get(st);
                 trouve = true;
             }
         }
@@ -58,9 +58,9 @@ public class ControllerCommand {
         String fragLigne = s.nextLine();
         boolean trouve = false;
         LineFragmentation res = null;
-        for (LineFragmentation lf : plan.getArcs()) {
-            if (lf.getName().contains(fragLigne.toUpperCase())) {
-                res = lf;
+        for (String lf : plan.getArcs().keySet()) {
+            if (plan.getArcs().get(lf).getName().contains(fragLigne.toUpperCase())) {
+                res = plan.getArcs().get(lf);
                 trouve = true;
             }
         }
