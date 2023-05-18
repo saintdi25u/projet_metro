@@ -17,11 +17,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class Plan {
-	private ArrayList<Line> lines = new ArrayList<>();
-
-
-	private ArrayList<LineFragmentation> arcs = new ArrayList<>();
-	private ArrayList<Station> noeuds = new ArrayList<>();
+	private ArrayList<Line> line = new ArrayList<>();
+	private HashMap<String, Line> lines = new HashMap<>();
+	private HashMap<String, LineFragmentation> arcs = new HashMap<>();
+	private HashMap<String, Station> noeuds = new HashMap<>();
+	
 	
 	/**
 	 * Constructeur du plan. 
@@ -86,45 +86,59 @@ public class Plan {
 				double dy = endStation.getPositionY()-startStation.getPositionY();
 				Double distance =  Math.sqrt(dx*dx + dy*dy);
 				LineFragmentation lineF = new LineFragmentation(travelTime,startStation,endStation, distance);
-				this.noeuds.add(startStation);
-				this.noeuds.add(endStation);
+				this.noeuds.put(startStation.getName(), startStation);
+				this.noeuds.put(endStation.getName(), endStation);
 				
 				fragements.add(lineF);
-				this.arcs.add(lineF);
+				this.arcs.put(startStation.getName()+endStation.getName(), lineF);
 
 			}
 	    	
 	    	Line line = new Line(fragements, num);
-	    	this.lines.add(line);
+	    	this.lines.put(String.valueOf(num), line);
 		  }
-	      HashSet<Station> supDoublons = new HashSet<>(this.noeuds);  
-	      this.noeuds = new ArrayList<>(supDoublons);
-	      this.noeuds.remove(0);
+
 	}   
 
-	public ArrayList<LineFragmentation> getArcs() {
+	
+
+	public HashMap<String, LineFragmentation> getArcs() {
 		return arcs;
 	}
 
-	public void setArcs(ArrayList<LineFragmentation> arcs) {
+
+
+	public void setArcs(HashMap<String, LineFragmentation> arcs) {
 		this.arcs = arcs;
 	}
 
-	public ArrayList<Station> getNoeuds() {
+
+
+	public HashMap<String, Station> getNoeuds() {
 		return noeuds;
 	}
 
-	public void setNoeuds(ArrayList<Station> noeuds) {
+
+
+	public void setNoeuds(HashMap<String, Station> noeuds) {
 		this.noeuds = noeuds;
 	}
 
-	public ArrayList<Line> getLines() {
+
+
+	
+
+	public HashMap<String, Line> getLines() {
 		return lines;
 	}
 
-	public void setLines(ArrayList<Line> lines) {
+
+
+	public void setLines(HashMap<String, Line> lines) {
 		this.lines = lines;
 	}
+
+
 
 	@Override
 	public String toString() {
@@ -137,9 +151,9 @@ public class Plan {
 		float distanceTmp;
 		ArrayList<String> stationsKnown = new ArrayList<String>();
 		// pour chaque ligne présent dans le plan
-		for (Line line : this.lines) {
+		for (String line : this.lines.keySet()) {
 			// pour chaque fragment de ligne présent sur la ligne line
-			for (LineFragmentation lf : line.getFragements()) {
+			for (LineFragmentation lf : this.lines.get(line).getFragements()) {
 				if (!stationsKnown.contains(lf.getStartStation().getName())) {
 					Station startStation = lf.getStartStation();
 					distanceTmp = (float) Math.sqrt(Math.pow(startStation.getPositionX() - posXInitial, 2)
@@ -173,18 +187,18 @@ public class Plan {
 	public HashMap<String, Double> distanceAFlightBird(String nameStation){
 		HashMap<String, Double> map = new HashMap<>();
 		Station end = null;   
-		for (int i = 0; i <  this.noeuds.size(); i++) {
-			if (this.noeuds.get(i).getName().equals(nameStation)) {
-				end = this.noeuds.get(i);
+		for (String noeud : this.noeuds.keySet()) {
+			if (noeud.equals(nameStation)) {
+				end = noeuds.get(noeud);
 			}
-		} 
+		}
 		if(end == null) {
 			return null;
 		}
-		for (int i = 0; i < this.noeuds.size(); i++) {
-			double dx = end.getPositionX() - this.noeuds.get(i).getPositionX();
-			double dy = end.getPositionY() - this.noeuds.get(i).getPositionY();
-			map.put(this.noeuds.get(i).getName(), Math.sqrt(dx * dx + dy * dy));
+		for (String noeud : this.noeuds.keySet()) {
+			double dx = end.getPositionX() - this.noeuds.get(noeud).getPositionX();
+			double dy = end.getPositionY() - this.noeuds.get(noeud).getPositionY();
+			map.put(this.noeuds.get(noeud).getName(), Math.sqrt(dx * dx + dy * dy));
 		}
 		return map;
 
@@ -195,21 +209,21 @@ public class Plan {
 	 */
 	public HashMap<String, ArrayList<Station>> reachableStations(){
 		HashMap<String, ArrayList<Station>> map = new HashMap<>();
-		
-		for (Station noeud : this.noeuds) {
+						
+		for (String keyNoeud : this.noeuds.keySet()) {
 			ArrayList<Station> reachStations = new ArrayList<>();
-		    for(LineFragmentation arc : this.arcs) {		 
-		    	if (arc.getStartStation().getName().equals(noeud.getName())) {
-		    		reachStations.add(arc.getEndStation());		    		
+		    for(String keyLineF : this.arcs.keySet()) {		 
+		    	if (arcs.get(keyLineF).getStartStation().getName().equals(noeuds.get(keyNoeud).getName())) {
+		    		reachStations.add(arcs.get(keyLineF).getEndStation());		    		
 				}
-		    	if (arc.getEndStation().getName().equals(noeud.getName())) {
-		    		reachStations.add(arc.getStartStation());
+		    	if (arcs.get(keyLineF).getEndStation().getName().equals(noeuds.get(keyNoeud).getName())) {
+		    		reachStations.add(arcs.get(keyLineF).getStartStation());
 				}
 		    }
 		    HashSet<Station> supDoublons = new HashSet<>(reachStations);
 		    reachStations = new ArrayList<>(supDoublons);
 		    
-		    map.put(noeud.getName(), reachStations);
+		    map.put(noeuds.get(keyNoeud).getName(), reachStations);
 		}
 		
 		
@@ -307,9 +321,9 @@ public class Plan {
 			ArrayList<LineFragmentation> lines = new ArrayList<>();
 			//On place dans lines les fragments de lignes qui composent le chemin entre les deux stations
 			for (int i = 0; i < path.size()-1; i++) {
-				for(LineFragmentation graphLine : this.arcs) {			
-					if (path.get(i).equals(graphLine.getStartStation().getName()) && path.get(i+1).equals(graphLine.getEndStation().getName()) ) {
-						lines.add(graphLine);
+				for(String keyLineF : this.arcs.keySet()) {			
+					if (path.get(i).equals(this.arcs.get(keyLineF).getStartStation().getName()) && path.get(i+1).equals(this.arcs.get(keyLineF).getEndStation().getName()) ) {
+						lines.add(this.arcs.get(keyLineF));
 					}
 				}
 			}
@@ -350,8 +364,8 @@ public class Plan {
 		
 		
 		HashMap<String, Station> node = new HashMap<>();
-		for (Station n : this.noeuds) {
-			node.put(n.getName(), n);
+		for (String n : this.noeuds.keySet()) {
+			node.put(this.noeuds.get(n).getName(), this.noeuds.get(n));
 		}
 		
 		pile.put(startStationName, 0.0);
@@ -431,8 +445,8 @@ public class Plan {
 		ArrayList<ArrayList<String>> transformPath = new ArrayList<>();
 		
 		for (int i = 0; i < path.size()-1; i++) {
-			for(Line line : this.lines) {
-				for(LineFragmentation lineFrag : line.getFragements()) {
+			for(String line : this.lines.keySet()) {
+				for(LineFragmentation lineFrag : this.lines.get(line).getFragements()) {
 					if (path.get(i).equals(lineFrag.getStartStation().getName()) && path.get(i+1).equals(lineFrag.getEndStation().getName())) {
 						ArrayList<String> stationsGoodOrder = new ArrayList<>();
 						stationsGoodOrder.add(path.get(i));
@@ -440,7 +454,7 @@ public class Plan {
 						
 						
 						transformPath.add(stationsGoodOrder);
-						numLines.add(line.getNumLine());
+						numLines.add(this.lines.get(line).getNumLine());
 					}
 					if (path.get(i+1).equals(lineFrag.getStartStation().getName()) && path.get(i).equals(lineFrag.getEndStation().getName())) {
 						ArrayList<String> stationsNewOrder = new ArrayList<>();
@@ -449,7 +463,7 @@ public class Plan {
 
 						
 						transformPath.add(stationsNewOrder);
-						numLines.add(line.getNumLine());
+						numLines.add(this.lines.get(line).getNumLine());
 					}
 				}
 			}

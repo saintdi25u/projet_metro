@@ -1,5 +1,6 @@
 package fr.ul.miage;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -127,10 +128,13 @@ public class App
 
     public static void main( String[] args )
     {
+    	
     	Plan p = new Plan();
+    	/*
 		App app = new App();
 		app.menu(p);
-		/* 
+		
+    	/*
        	ArrayList<String> paths = p.starA("V", "T");
     	for(String s :paths ) {
     		System.out.println(s+"\n");  

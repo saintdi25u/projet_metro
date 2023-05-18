@@ -55,14 +55,14 @@ public class PlanTest {
         assertNull(resultNonExisting);
 
         // Test si le résultat est bon :
-        ArrayList<Station> stations = new ArrayList<>();
+        HashMap<String, Station> stations = new HashMap<>();
 
         Station s1 = new Station(3, (float) 2.0, (float) 3.0, "station1");
         Station s2 = new Station(3, (float) 3.0, (float) 4.0, "station2");
         Station s3 = new Station(3, (float) 4.0, (float) 5.0, "station3");
-        stations.add(s1);
-        stations.add(s2);
-        stations.add(s3);
+        stations.put(s1.getName(), s1);
+        stations.put(s2.getName(), s2);
+        stations.put(s3.getName(), s3);
         plan.setNoeuds(stations);
         HashMap<String, Double> result = plan.distanceAFlightBird(s3.getName());
         HashMap<String, Double> searchResult = new HashMap();
@@ -84,22 +84,22 @@ public class PlanTest {
         Plan plan = new Plan();
 
         // Exemple de test avec des données de stations et fragments de lignes
-        ArrayList<Station> stations = new ArrayList<>();
+        HashMap<String, Station> stations = new HashMap<>();
 
         Station s1 = new Station(3, (float) 2.0, (float) 3.0, "station1");
         Station s2 = new Station(3, (float) 3.0, (float) 4.0, "station2");
         Station s3 = new Station(3, (float) 4.0, (float) 5.0, "station3");
-        stations.add(s1);
-        stations.add(s2);
-        stations.add(s3);
+        stations.put(s1.getName(), s1);
+        stations.put(s2.getName(), s2);
+        stations.put(s3.getName(), s3);
 
-        ArrayList<LineFragmentation> fragments = new ArrayList<>();
+        HashMap<String, LineFragmentation> fragments = new HashMap<>();
         LineFragmentation l1 = new LineFragmentation(8, s1, s2, 1);
         LineFragmentation l2 = new LineFragmentation(9, s2, s3, 1);
         LineFragmentation l3 = new LineFragmentation(3, s1, s3, 1);
-        fragments.add(l1);
-        fragments.add(l2);
-        fragments.add(l3);
+        fragments.put(s1.getName()+s2.getName(), l1);
+        fragments.put(s2.getName()+s3.getName(), l2);
+        fragments.put(s1.getName()+s3.getName(), l3);
 
         plan.setNoeuds(stations);
         plan.setArcs(fragments);
@@ -181,28 +181,30 @@ public class PlanTest {
     public void testPathBetweenTwoStations() {
         Plan plan = new Plan();
 
-        // Exemple de test avec des données de stations et fragments de lignes
-        ArrayList<Station> stations = new ArrayList<>();
+        // Exemple de test avec des données de stations et fragments de lignes        
+        HashMap<String, Station> stations = new HashMap<>();
 
         Station s1 = new Station(3, (float) 2.0, (float) 3.0, "station1");
         Station s2 = new Station(3, (float) 3.0, (float) 4.0, "station2");
         Station s3 = new Station(3, (float) 4.0, (float) 5.0, "station3");
         Station s4 = new Station(3, (float) 5.0, (float) 6.0, "station4");
 
-        stations.add(s1);
-        stations.add(s2);
-        stations.add(s3);
-        stations.add(s4);
+        stations.put(s1.getName(), s1);
+        stations.put(s2.getName(), s2);
+        stations.put(s3.getName(), s3);
+        stations.put(s4.getName(), s4);
 
-        ArrayList<LineFragmentation> fragments = new ArrayList<>();
+
+        HashMap<String, LineFragmentation> fragments = new HashMap<>();
         LineFragmentation l1 = new LineFragmentation(8, s1, s2, 1);
         LineFragmentation l2 = new LineFragmentation(9, s2, s3, 1);
         LineFragmentation l3 = new LineFragmentation(3, s1, s3, 1);
         LineFragmentation l4 = new LineFragmentation(3, s3, s4, 1);
-        fragments.add(l1);
-        fragments.add(l2);
-        fragments.add(l3);
-        fragments.add(l4);
+        fragments.put(s1.getName()+s2.getName(), l1);
+        fragments.put(s2.getName()+s3.getName(), l2);
+        fragments.put(s1.getName()+s3.getName(), l3);
+        fragments.put(s3.getName()+s4.getName(), l4);
+
 
         plan.setNoeuds(stations);
         plan.setArcs(fragments);
@@ -227,27 +229,29 @@ public class PlanTest {
         Plan plan = new Plan();
 
         // Exemple de test avec des données de stations et fragments de lignes
-        ArrayList<Station> stations = new ArrayList<>();
+        HashMap<String, Station> stations = new HashMap<>();
 
         Station s1 = new Station(3, (float) 2.0, (float) 3.0, "station1");
         Station s2 = new Station(3, (float) 3.0, (float) 4.0, "station2");
         Station s3 = new Station(3, (float) 4.0, (float) 5.0, "station3");
         Station s4 = new Station(3, (float) 5.0, (float) 6.0, "station4");
 
-        stations.add(s1);
-        stations.add(s2);
-        stations.add(s3);
-        stations.add(s4);
+        stations.put(s1.getName(), s1);
+        stations.put(s2.getName(), s2);
+        stations.put(s3.getName(), s3);
+        stations.put(s4.getName(), s4);
 
-        ArrayList<LineFragmentation> fragments = new ArrayList<>();
+
+        HashMap<String, LineFragmentation> fragments = new HashMap<>();
         LineFragmentation l1 = new LineFragmentation(8, s1, s2, 1);
-        LineFragmentation l2 = new LineFragmentation(9, s2, s3, 2);
+        LineFragmentation l2 = new LineFragmentation(9, s2, s3, 1);
         LineFragmentation l3 = new LineFragmentation(3, s1, s3, 1);
-        LineFragmentation l4 = new LineFragmentation(3, s3, s4, 4);
-        fragments.add(l1);
-        fragments.add(l2);
-        fragments.add(l3);
-        fragments.add(l4);
+        LineFragmentation l4 = new LineFragmentation(3, s3, s4, 1);
+        fragments.put(s1.getName()+s2.getName(), l1);
+        fragments.put(s2.getName()+s3.getName(), l2);
+        fragments.put(s1.getName()+s3.getName(), l3);
+        fragments.put(s3.getName()+s4.getName(), l4);
+
 
         plan.setNoeuds(stations);
         plan.setArcs(fragments);
@@ -268,27 +272,29 @@ public class PlanTest {
         Plan plan = new Plan();
 
         // Exemple de test avec des données de stations et fragments de lignes
-        ArrayList<Station> stations = new ArrayList<>();
+        HashMap<String, Station> stations = new HashMap<>();
 
         Station s1 = new Station(3, (float) 2.0, (float) 3.0, "station1");
         Station s2 = new Station(3, (float) 3.0, (float) 4.0, "station2");
         Station s3 = new Station(3, (float) 4.0, (float) 5.0, "station3");
         Station s4 = new Station(3, (float) 5.0, (float) 6.0, "station4");
 
-        stations.add(s1);
-        stations.add(s2);
-        stations.add(s3);
-        stations.add(s4);
+        stations.put(s1.getName(), s1);
+        stations.put(s2.getName(), s2);
+        stations.put(s3.getName(), s3);
+        stations.put(s4.getName(), s4);
 
-        ArrayList<LineFragmentation> fragments = new ArrayList<>();
+
+        HashMap<String, LineFragmentation> fragments = new HashMap<>();
         LineFragmentation l1 = new LineFragmentation(8, s1, s2, 1);
-        LineFragmentation l2 = new LineFragmentation(9, s2, s3, 2);
+        LineFragmentation l2 = new LineFragmentation(9, s2, s3, 1);
         LineFragmentation l3 = new LineFragmentation(3, s1, s3, 1);
-        LineFragmentation l4 = new LineFragmentation(3, s3, s4, 4);
-        fragments.add(l1);
-        fragments.add(l2);
-        fragments.add(l3);
-        fragments.add(l4);
+        LineFragmentation l4 = new LineFragmentation(3, s3, s4, 1);
+        fragments.put(s1.getName()+s2.getName(), l1);
+        fragments.put(s2.getName()+s3.getName(), l2);
+        fragments.put(s1.getName()+s3.getName(), l3);
+        fragments.put(s3.getName()+s4.getName(), l4);
+
 
         plan.setNoeuds(stations);
         plan.setArcs(fragments);
