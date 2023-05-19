@@ -12,6 +12,23 @@ public class Line {
 		this.numLine = numLine;
 	}
 
+	/**
+	 * Fonction permettant de récupérer tous les incident de la ligne
+	 * 
+	 * @return la liste des incident de la ligne
+	 */
+	public ArrayList<Incident> getIncidents() {
+		ArrayList<Incident> incidents = new ArrayList<Incident>();
+		// on parcourt les fragements de ligne de la ligne
+		for (int i = 0; i < fragements.size(); i++) {
+			// si le fragment a un incident, on ajoute dans la liste a retourner
+			if (fragements.get(i).hasIncident()) {
+				incidents.add(fragements.get(i).getIncident());
+			}
+		}
+		return incidents;
+	}
+
 	public ArrayList<LineFragmentation> getFragements() {
 		return fragements;
 	}
@@ -25,7 +42,7 @@ public class Line {
 	}
 
 	public void setNumLine(int numLine) {
-		this.numLine = numLine; 
+		this.numLine = numLine;
 	}
 
 	@Override
