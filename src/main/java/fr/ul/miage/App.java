@@ -8,8 +8,7 @@ import java.util.Scanner;
  *
  */
 
-public class App 
-{
+public class App {
 	private String preference = "rapide";
 
 	public String getPreference() {
@@ -22,18 +21,19 @@ public class App
 
 	/**
 	 * Fonction qui gère le menu générale de l'application
+	 * 
 	 * @param p Plan du métro
 	 */
-	public void menu(Plan p){
+	public void menu(Plan p) {
 		Scanner s = new Scanner(System.in);
 		System.out.println("Bienvenue dans l'application");
-		while(true){
+		while (true) {
 			System.out.println("Si vous êtes admnistrateur,taper 1");
 			System.out.println("Si vous êtes utilisateur,taper 2");
 			System.out.println("Si vous voulez sortir de l'application, taper 3");
 			try {
 				int choix = Integer.parseInt(s.nextLine());
-				switch(choix) {
+				switch (choix) {
 					case 1:
 						menuAdmin(s, p);
 						break;
@@ -49,7 +49,8 @@ public class App
 				}
 			} catch (Exception e) {
 				// TODO: handle exception
-				System.out.println("Veuillez saisir les numéros 1, 2 ou 3 pour accéder aux fonctionnalités de l'application");
+				System.out.println(
+						"Veuillez saisir les numéros 1, 2 ou 3 pour accéder aux fonctionnalités de l'application");
 				menu(p);
 			}
 		}
@@ -57,17 +58,19 @@ public class App
 
 	/**
 	 * Fonction qui gère le menu administrateur de l'application
+	 * 
 	 * @param s Scanner pour lire les lignes de commandes de l'utilisateur
 	 * @param p Plan du métro
 	 */
-	public void menuUtil(Scanner s, Plan p){
+	public void menuUtil(Scanner s, Plan p) {
 		ControllerCommand c = new ControllerCommand();
 		System.out.println("Bienvenue dans le menu utilisateur de l'application");
 		boolean admin = true;
-		while(admin){
-			System.out.println("Si vous souhaitez sortir du menu utilisateur, taper 3");try {
+		while (admin) {
+			System.out.println("Si vous souhaitez sortir du menu utilisateur, taper 3");
+			try {
 				int choix = Integer.parseInt(s.nextLine());
-				switch(choix){
+				switch (choix) {
 					case 1:
 						System.out.println("Saisir vos preferences de trajet");
 						setPreference(c.saisiPreference(s));
@@ -81,28 +84,31 @@ public class App
 				}
 			} catch (Exception e) {
 				// TODO: handle exception
-				System.out.println("Veuillez saisir les numéros 1, 2 ou 3 pour accéder aux fonctionnalités de l'application");
-				menuUtil(s,p);
+				System.out.println(
+						"Veuillez saisir les numéros 1, 2 ou 3 pour accéder aux fonctionnalités de l'application");
+				menuUtil(s, p);
 			}
 		}
 	}
 
 	/**
 	 * Fonction qui gère le menu utilisateur de l'application
+	 * 
 	 * @param s Scanner pour lire les lignes de commandes de l'utilisateur
 	 * @param p Plan du métro
 	 */
-	public void menuAdmin(Scanner s, Plan p){
+	public void menuAdmin(Scanner s, Plan p) {
 		ControllerCommand c = new ControllerCommand();
 		System.out.println("Bienvenue dans le menu administrateur de l'application");
 		boolean admin = true;
-		while(admin){
+		while (admin) {
 			System.out.println("Pour déclarer un incident sur une station, taper 1");
 			System.out.println("Pour déclarer un incident entre deux station, taper 2");
-			System.out.println("Si vous souhaitez sortir du menu administrateur, taper 3");
+			System.out.println("Pour voir les incidents sur une ligne, taper 3");
+			System.out.println("Si vous souhaitez sortir du menu administrateur, taper 4");
 			try {
 				int choix = Integer.parseInt(s.nextLine());
-				switch(choix){
+				switch (choix) {
 					case 1:
 						c.initStationIncident(s, p);
 						break;
@@ -110,6 +116,9 @@ public class App
 						c.initFragLigneIncident(s, p);
 						break;
 					case 3:
+						c.showIncidentsOnLine(s, p);
+						break;
+					case 4:
 						admin = false;
 						System.out.println("Vous quittez le menu admnistrateur");
 						break;
@@ -118,31 +127,29 @@ public class App
 						break;
 				}
 			} catch (Exception e) {
-				// TODO: handle exception
-				System.out.println("Veuillez saisir les numéros 1, 2 ou 3 pour accéder aux fonctionnalités de l'application");
-				menuAdmin(s,p);
+				System.out.println(
+						"Veuillez saisir les numéros 1, 2 ou 3 pour accéder aux fonctionnalités de l'application");
+				menuAdmin(s, p);
 			}
 		}
 
 	}
 
-    public static void main( String[] args )
-    {
-    	
-    	Plan p = new Plan();
-    	/*
+	public static void main(String[] args) {
+
+		Plan p = new Plan();
+
 		App app = new App();
 		app.menu(p);
-		 */	
-    	Incident i = new Incident("test");
-    	p.getNoeuds().get("U").setIncident(i);
-    	p.getArcs().get("JU").setIncident(i);
-       	ArrayList<String> paths = p.starA("T", "V");
-    	for(String s :paths ) {
-    		System.out.println(s+"\n");  
-    	}
-     	p.shapingPaths(paths);	
-		
 
-    }
+		// Incident i = new Incident("test");
+		// p.getNoeuds().get("U").setIncident(i);
+		// p.getArcs().get("JU").setIncident(i);
+		// ArrayList<String> paths = p.starA("T", "V");
+		// for (String s : paths) {
+		// System.out.println(s + "\n");
+		// }
+		// p.shapingPaths(paths);
+
+	}
 }

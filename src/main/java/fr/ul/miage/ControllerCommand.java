@@ -1,15 +1,18 @@
 package fr.ul.miage;
 
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.Scanner;
 
 public class ControllerCommand {
 
     /**
      * Fonction qui permet de créer un incident avec les interactions utilisateurs
+     * 
      * @param s Scanner pour lire les commandes utilisateurs
      * @return un Incident
      */
-    public Incident createIncident(Scanner s){
+    public Incident createIncident(Scanner s) {
         System.out.println("Quelle est la rasion de l'incident ?");
         String reason = s.nextLine();
         Incident incident = new Incident(reason);
@@ -17,11 +20,13 @@ public class ControllerCommand {
     }
 
     /**
-     * Fonction qui permet de créer un incident sur une station avec les interactions utilisateurs
-     * @param s Scanner pour lire les commandes utilisateurs
+     * Fonction qui permet de créer un incident sur une station avec les
+     * interactions utilisateurs
+     * 
+     * @param s    Scanner pour lire les commandes utilisateurs
      * @param plan Plan du métro
      */
-    public void initStationIncident(Scanner s, Plan plan){
+    public void initStationIncident(Scanner s, Plan plan) {
         Incident incident = createIncident(s);
         System.out.println("Sur quelle station est l'incident ?");
         // Afficher le nom de toutes les stations
@@ -35,19 +40,21 @@ public class ControllerCommand {
                 trouve = true;
             }
         }
-        if(!trouve){
+        if (!trouve) {
             System.out.println("Cette station n'existe pas, veulliez choisir une station de la liste");
             initStationIncident(s, plan);
         } else {
             res.setIncident(incident);
             System.out.println("Incident créé avec succès sur la station " + res.getName());
         }
-        
+
     }
 
     /**
-     * Fonction qui permet de créer un incident sur un fraguemùent de ligne avec les interactions utilisateurs
-     * @param s Scanner pour lire les commandes utilisateurs
+     * Fonction qui permet de créer un incident sur un fraguemùent de ligne avec les
+     * interactions utilisateurs
+     * 
+     * @param s    Scanner pour lire les commandes utilisateurs
      * @param plan Plan du métro
      */
     public void initFragLigneIncident(Scanner s, Plan plan) {
@@ -64,7 +71,7 @@ public class ControllerCommand {
                 trouve = true;
             }
         }
-        if(!trouve){
+        if (!trouve) {
             System.out.println("Cet fraguement de ligne n'existe pas, veulliez choisir une station de la liste");
             initStationIncident(s, plan);
         } else {
@@ -100,5 +107,65 @@ public class ControllerCommand {
         }
         System.out.println("Vos choix ont été sauvegardés avec succès !");
         return preference;
+    }
+
+    /**
+     * Méthode permettant d'afficher tous les incidents présent sur une ligne
+     * 
+     * @param s le scanner de l'application
+     * @param p le plan
+     */
+    public void showIncidentsOnLine(Scanner s, Plan p) {
+        System.out.println("Veuillez choisir le numéro de la ligne dont vous souhaitez connaitre les incidents.");
+        for (Map.Entry<String, Line> entry : p.getLines().entrySet()) {
+            System.out.println(entry.getKey() + ". Ligne " + entry.getKey());
+        }
+        String numLine = s.nextLine();
+        if (p.getLines().containsKey(numLine)) {
+            showIncidentOnLineFragmentationInLine(numLine, p);
+            showIncidentOnStaionsInLine(numLine, p);
+        }
+    }
+
+    /**
+     * Méthode permettant d'afficher les incidents sur les fragments de ligne d'une
+     * ligne
+     * 
+     * @param numLine le numéro de la ligne
+     * @param p       le plan
+     */
+    public void showIncidentOnLineFragmentationInLine(String numLine, Plan p) {
+        Line l = p.getLines().get(numLine);
+        ArrayList<LineFragmentation> lineFragmentationWithIncidents = p.getLineFragmentationWithIncidentsOnLine(l);
+        if (!lineFragmentationWithIncidents.isEmpty()) {
+            System.out.println(
+                    "Voici les incidents sur les fragments de ligne pour la ligne numéro " + numLine + ".");
+            for (int i = 0; i < lineFragmentationWithIncidents.size(); i++) {
+                System.out.println(lineFragmentationWithIncidents.get(i).getName() + " - Motif : "
+                        + lineFragmentationWithIncidents.get(i).getIncident().getReasonOfIncident());
+            }
+        } else {
+            System.out.println("Il n'y a aucun incident en cours sur les fragments de ligne de cette ligne.");
+        }
+    }
+
+    /**
+     * Méthode permettant d'afficher les incidents sur les stations d'une ligne
+     * 
+     * @param numLine le numéro de la ligne
+     * @param p       le plan
+     */
+    public void showIncidentOnStaionsInLine(String numLine, Plan p) {
+        Line l = p.getLines().get(numLine);
+        ArrayList<Station> stationWithIncidents = p.getStationWithIncidentOnLine(l);
+        if (!stationWithIncidents.isEmpty()) {
+            System.out.println("Voici les incidents sur les stations pour la ligne numéro " + numLine + ".");
+            for (int j = 0; j < stationWithIncidents.size(); j++) {
+                System.out.println(stationWithIncidents.get(j).getName() + " - Motif : "
+                        + stationWithIncidents.get(j).getIncident().getReasonOfIncident());
+            }
+        } else {
+            System.out.println("Il n'y a aucun incident en cours sur les stations de cette ligne\n");
+        }
     }
 }

@@ -128,6 +128,7 @@ public class Plan {
 		return "Plan [lines=" + lines + "]";
 	}
 
+	// Code a factorisé
 	public Station getNearestStation(float posXInitial, float posYInitial) {
 		Station stationNearest = null;
 		float distance = Float.MAX_VALUE;
@@ -532,8 +533,20 @@ public class Plan {
 		}
 	}
 
-	public ArrayList<Incident> getIncidentsOnLine(Line line) {
-		return line.getIncidents();
+	public ArrayList<LineFragmentation> getLineFragmentationWithIncidentsOnLine(Line line) {
+		try {
+			return line.getLineFragmentationWithIncident();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	public ArrayList<Station> getStationWithIncidentOnLine(Line line) {
+		try {
+			return line.getStationWithIncident();
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 }

@@ -13,20 +13,58 @@ public class Line {
 	}
 
 	/**
-	 * Fonction permettant de récupérer tous les incident de la ligne
+	 * Fonction permettant de récupérer tous les incident présents sur les fragments
+	 * de ligne de la ligne
 	 * 
-	 * @return la liste des incident de la ligne
+	 * @return la liste des incidents des fragments de ligne de la ligne
 	 */
-	public ArrayList<Incident> getIncidents() {
-		ArrayList<Incident> incidents = new ArrayList<Incident>();
+	public ArrayList<LineFragmentation> getLineFragmentationWithIncident() {
+		ArrayList<LineFragmentation> incidents = new ArrayList<LineFragmentation>();
 		// on parcourt les fragements de ligne de la ligne
 		for (int i = 0; i < fragements.size(); i++) {
 			// si le fragment a un incident, on ajoute dans la liste a retourner
 			if (fragements.get(i).hasIncident()) {
-				incidents.add(fragements.get(i).getIncident());
+				incidents.add(fragements.get(i));
 			}
 		}
 		return incidents;
+	}
+
+	/**
+	 * Fonction permettant de récupérer tous les incident des stations présentes sur
+	 * la ligne
+	 * 
+	 * @return la liste des stations sur les stations de la ligne
+	 */
+	public ArrayList<Station> getStationWithIncident() {
+		ArrayList<Station> stations = new ArrayList<Station>();
+		for (int i = 0; i < fragements.size(); i++) {
+			if (fragements.get(i).getStartStation().hasIncident()) {
+				stations.add(fragements.get(i).getStartStation());
+			}
+			if (i == fragements.size() - 1) {
+				if (fragements.get(i).getEndStation().hasIncident()) {
+					stations.add(fragements.get(i).getEndStation());
+				}
+			}
+		}
+		return stations;
+	}
+
+	/**
+	 * Fonction permettant de récupérer la liste des stations présente sur une ligne
+	 * 
+	 * @return la liste des stations présente sur une ligne
+	 */
+	public ArrayList<Station> getAllStation() {
+		ArrayList<Station> stations = new ArrayList<Station>();
+		for (int i = 0; i < fragements.size(); i++) {
+			stations.add(fragements.get(i).getStartStation());
+			if (i == fragements.size() - 1) {
+				stations.add(fragements.get(i).getEndStation());
+			}
+		}
+		return stations;
 	}
 
 	public ArrayList<LineFragmentation> getFragements() {
