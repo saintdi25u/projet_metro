@@ -32,22 +32,15 @@ public class ControllerCommand {
         // Afficher le nom de toutes les stations
         System.out.println();
         String station = s.nextLine();
-        boolean trouve = false;
         Station res = null;
-        for (String st : plan.getNoeuds().keySet()) {
-            if (plan.getNoeuds().get(st).getName().contains(station.toUpperCase())) {
-                res = plan.getNoeuds().get(st);
-                trouve = true;
-            }
-        }
-        if (!trouve) {
+        try {
+           res = plan.getNoeuds().get(station.toUpperCase());
+           res.setIncident(incident);
+            System.out.println("Incident créé avec succès sur la station " + res.getName());
+        } catch (Exception e) {
             System.out.println("Cette station n'existe pas, veulliez choisir une station de la liste");
             initStationIncident(s, plan);
-        } else {
-            res.setIncident(incident);
-            System.out.println("Incident créé avec succès sur la station " + res.getName());
         }
-
     }
 
     /**
@@ -63,20 +56,15 @@ public class ControllerCommand {
         // Afficher le nom de tous les fraguement de ligne
         System.out.println();
         String fragLigne = s.nextLine();
-        boolean trouve = false;
         LineFragmentation res = null;
-        for (String lf : plan.getArcs().keySet()) {
-            if (plan.getArcs().get(lf).getName().contains(fragLigne.toUpperCase())) {
-                res = plan.getArcs().get(lf);
-                trouve = true;
-            }
-        }
-        if (!trouve) {
-            System.out.println("Cet fraguement de ligne n'existe pas, veulliez choisir une station de la liste");
-            initStationIncident(s, plan);
-        } else {
+        try {
+            res = plan.getArcs().get(fragLigne.toUpperCase());
             res.setIncident(incident);
             System.out.println("Incident créé avec succès sur le fraguement de ligne " + res.getName());
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.out.println("Cet fraguement de ligne n'existe pas, veulliez choisir une station de la liste");
+            initStationIncident(s, plan);
         }
     }
 

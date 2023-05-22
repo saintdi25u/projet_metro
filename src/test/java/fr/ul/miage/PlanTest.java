@@ -65,7 +65,7 @@ public class PlanTest {
         stations.put(s3.getName(), s3);
         plan.setNoeuds(stations);
         HashMap<String, Double> result = plan.distanceAFlightBird(s3.getName());
-        HashMap<String, Double> searchResult = new HashMap();
+        HashMap<String, Double> searchResult = new HashMap<String, Double>();
         searchResult.put(s1.getName(), 2.8284271247461903);
         searchResult.put(s2.getName(), 1.4142135623730951);
         searchResult.put(s3.getName(), 0.0);

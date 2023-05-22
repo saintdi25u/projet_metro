@@ -1,12 +1,6 @@
 package fr.ul.miage;
 
-import java.util.ArrayList;
 import java.util.Scanner;
-
-/**
- * Hello world!
- *
- */
 
 public class App {
 	private String preference = "rapide";
@@ -167,15 +161,5 @@ public class App {
 
 		App app = new App();
 		app.menu(p);
-
-		// Incident i = new Incident("test");
-		// p.getNoeuds().get("U").setIncident(i);
-		// p.getArcs().get("JU").setIncident(i);
-		// ArrayList<String> paths = p.starA("T", "V");
-		// for (String s : paths) {
-		// System.out.println(s + "\n");
-		// }
-		// p.shapingPaths(paths);
-
 	}
 }
