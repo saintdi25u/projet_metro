@@ -168,4 +168,29 @@ public class ControllerCommand {
             System.out.println("Il n'y a aucun incident en cours sur les stations de cette ligne\n");
         }
     }
+
+    /**
+     * Méthode permettant de demander à l'utilisateur de rentré sa coordonées X
+     * 
+     * @param s le scanner
+     * @param p le plan
+     * @return la latitude rentré par l'utilisateur
+     */
+
+    public double setPositionXByUser(Scanner s, Plan p) {
+        System.out.println("Veuillez rentrer votre latitude.");
+        return s.nextDouble();
+    }
+
+    /**
+     * Méthode permettant de demander à l'utilisateur de rentré sa coordonées Y
+     * 
+     * @param s le scanner
+     * @param p le plan
+     * @return la longitude rentré par l'utilisateur
+     */
+    public double setPositionYByUser(Scanner s, Plan p) {
+        System.out.println("Veuillez rentrer votre longitude.");
+        return s.nextDouble();
+    }
 }

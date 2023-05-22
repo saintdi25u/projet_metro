@@ -10,9 +10,27 @@ import java.util.Scanner;
 
 public class App {
 	private String preference = "rapide";
+	private double positionX;
+	private double positionY;
 
 	public String getPreference() {
 		return preference;
+	}
+
+	public double getPositionX() {
+		return positionX;
+	}
+
+	public void setPositionX(double positionX) {
+		this.positionX = positionX;
+	}
+
+	public double getPositionY() {
+		return positionY;
+	}
+
+	public void setPositionY(double positionY) {
+		this.positionY = positionY;
 	}
 
 	public void setPreference(String preference) {
@@ -67,6 +85,8 @@ public class App {
 		System.out.println("Bienvenue dans le menu utilisateur de l'application");
 		boolean admin = true;
 		while (admin) {
+			System.out.println("Si vous souhaitez saisir vos préférence de trajet, taper 1");
+			System.out.println("Si vous souhaitez vous faire localiser, taper 2");
 			System.out.println("Si vous souhaitez sortir du menu utilisateur, taper 3");
 			try {
 				int choix = Integer.parseInt(s.nextLine());
@@ -74,6 +94,12 @@ public class App {
 					case 1:
 						System.out.println("Saisir vos preferences de trajet");
 						setPreference(c.saisiPreference(s));
+					case 2:
+						setPositionX(c.setPositionXByUser(s, p));
+						System.out.println("Latitude enregistré.");
+						setPositionY(c.setPositionYByUser(s, p));
+						System.out.println("Longitude enregistré.");
+						break;
 					case 3:
 						admin = false;
 						System.out.println("Vous quittez le menu utilisateur");
