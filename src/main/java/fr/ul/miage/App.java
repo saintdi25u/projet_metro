@@ -1,5 +1,7 @@
 package fr.ul.miage;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Scanner;
 
 public class App {
@@ -159,7 +161,13 @@ public class App {
 
 		Plan p = new Plan();
 
-		App app = new App();
-		app.menu(p);
+		//App app = new App();
+		//app.menu(p);
+		ArrayList<String> a = p.starA("T", "V");
+		for (int i = 0; i < a.size(); i++) {
+			System.out.println(a.get(i));
+			
+		}
+		p.shapingPaths(a);
 	}
 }

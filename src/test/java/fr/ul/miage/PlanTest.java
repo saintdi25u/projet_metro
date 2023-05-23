@@ -256,7 +256,7 @@ public class PlanTest {
         plan.setNoeuds(stations);
         plan.setArcs(fragments);
 
-        Double result = plan.distanceWhithStartStaion("station1", "station4");
+        Double result = plan.timeWhithStartStaion("station1", "station4");
         Double searchDistance = 5.0;
         Assertions.assertEquals(searchDistance, result);
     }

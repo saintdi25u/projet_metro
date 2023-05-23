@@ -318,12 +318,12 @@ public class Plan {
 	 * 
 	 * @param startStation   : station de départ
 	 * @param currentStation : autre station
-	 * @return : retourne la plus courte distance entre la station de départ et la
+	 * @return : retourne le temps de parcours le plus cours entre la station de départ et la
 	 *         station actuelle
 	 */
-	public Double distanceWhithStartStaion(String startStation, String currentStation) {
+	public Double timeWhithStartStaion(String startStation, String currentStation) {
 		ArrayList<ArrayList<String>> paths = pathsBetweenTwoStation(startStation, currentStation);
-		ArrayList<Double> distancePaths = new ArrayList<>();
+		ArrayList<Integer> distancePaths = new ArrayList<>();
 
 		for (ArrayList<String> path : paths) {
 			ArrayList<LineFragmentation> lines = new ArrayList<>();
@@ -337,11 +337,19 @@ public class Plan {
 					}
 				}
 			}
-			double distance = 0.0;
-			for (LineFragmentation lineFragmentation : lines) {
-				distance = distance + lineFragmentation.getDistance();
+			
+			int tempFragementsLigne = 0;
+			int tempArret = 0;
+			if (lines.size()>=1) {
+				 tempArret = lines.get(0).getStartStation().getStopTime();
 			}
-			distancePaths.add(distance);
+			
+								
+			for (LineFragmentation lineFragmentation : lines) {
+				tempFragementsLigne = tempFragementsLigne + lineFragmentation.getTime();
+				tempArret = tempArret+lineFragmentation.getEndStation().getStopTime();
+			}
+			distancePaths.add(tempFragementsLigne+tempArret);
 
 		}
 
@@ -398,7 +406,7 @@ public class Plan {
 			for (Station s : reachableStations.get(currentNode)) {
 				if (!traversedNode.contains(s.getName())) {
 					double heuristic = distanceAVoleDOiseau.get(s.getName())
-							+ distanceWhithStartStaion(startStationName, s.getName());
+							+ timeWhithStartStaion(startStationName, s.getName());
 					father.put(s.getName(), currentNode);
 					pile.put(s.getName(), heuristic);
 				}
