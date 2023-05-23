@@ -374,64 +374,69 @@ public class Plan {
 	 *         noms des station qui compose le chemin le plus court
 	 */
 	public ArrayList<String> starA(String startStationName, String endStationName) {
-		ArrayList<String> betterPath = new ArrayList<>();
-		HashMap<String, Double> pile = new HashMap<>();
-		ArrayList<String> traversedNode = new ArrayList<>();
-		HashMap<String, String> father = new HashMap<>();
-		majLignesFragmentation();
-		HashMap<String, ArrayList<Station>> reachableStations = reachableStations();
-		HashMap<String, Double> distanceAVoleDOiseau = distanceAFlightBird(endStationName);
+		
+		if (this.noeuds.containsKey(endStationName) && this.noeuds.containsKey(startStationName)) {
+			ArrayList<String> betterPath = new ArrayList<>();
+			HashMap<String, Double> pile = new HashMap<>();
+			ArrayList<String> traversedNode = new ArrayList<>();
+			HashMap<String, String> father = new HashMap<>();
+			majLignesFragmentation();
+			HashMap<String, ArrayList<Station>> reachableStations = reachableStations();
+			HashMap<String, Double> distanceAVoleDOiseau = distanceAFlightBird(endStationName);
 
-		HashMap<String, Station> node = new HashMap<>();
-		for (String n : this.noeuds.keySet()) {
-			node.put(this.noeuds.get(n).getName(), this.noeuds.get(n));
-		}
-
-		pile.put(startStationName, 0.0);
-		father.put(startStationName, "");
-
-		boolean stop = false;
-		while (stop == false) {
-			// On prend l'élément de la pile qui est la plus près de l'arriver, on le retire
-			// de la pile et on le parcours
-			pile = pileSort(pile);
-			String key = lastKeyInTheMap(pile);
-			pile.remove(key);
-			traversedNode.add(key);
-
-			// Ajout dans la pile toutes les station pouvant être atteinte depuis la station
-			// parcouru
-			String currentNode = traversedNode.get(traversedNode.size() - 1);
-			// System.out.println(currentNode);
-			for (Station s : reachableStations.get(currentNode)) {
-				if (!traversedNode.contains(s.getName())) {
-					double heuristic = distanceAVoleDOiseau.get(s.getName())
-							+ timeWhithStartStaion(startStationName, s.getName());
-					father.put(s.getName(), currentNode);
-					pile.put(s.getName(), heuristic);
-				}
-
+			HashMap<String, Station> node = new HashMap<>();
+			for (String n : this.noeuds.keySet()) {
+				node.put(this.noeuds.get(n).getName(), this.noeuds.get(n));
 			}
 
-			if (pile.containsKey(endStationName)) {
+			pile.put(startStationName, 0.0);
+			father.put(startStationName, "");
 
-				stop = true;
-				// reconstitution du chemin
-				betterPath.add(endStationName);
-				boolean fatherFound = false;
-				while (fatherFound == false) {
-					String fatherStation = father.get(betterPath.get(betterPath.size() - 1));
-					betterPath.add(fatherStation);
-					if (fatherStation.equals(startStationName)) {
-						fatherFound = true;
+			boolean stop = false;
+			while (stop == false) {
+				// On prend l'élément de la pile qui est la plus près de l'arriver, on le retire
+				// de la pile et on le parcours
+				pile = pileSort(pile);
+				String key = lastKeyInTheMap(pile);
+				pile.remove(key);
+				traversedNode.add(key);
+
+				// Ajout dans la pile toutes les station pouvant être atteinte depuis la station
+				// parcouru
+				String currentNode = traversedNode.get(traversedNode.size() - 1);
+				// System.out.println(currentNode);
+				for (Station s : reachableStations.get(currentNode)) {
+					if (!traversedNode.contains(s.getName())) {
+						double heuristic = distanceAVoleDOiseau.get(s.getName())
+								+ timeWhithStartStaion(startStationName, s.getName());
+						father.put(s.getName(), currentNode);
+						pile.put(s.getName(), heuristic);
 					}
+
+				}
+
+				if (pile.containsKey(endStationName)) {
+
+					stop = true;
+					// reconstitution du chemin
+					betterPath.add(endStationName);
+					boolean fatherFound = false;
+					while (fatherFound == false) {
+						String fatherStation = father.get(betterPath.get(betterPath.size() - 1));
+						betterPath.add(fatherStation);
+						if (fatherStation.equals(startStationName)) {
+							fatherFound = true;
+						}
+					}
+
 				}
 
 			}
-
-		}
-		Collections.reverse(betterPath);
-		return betterPath;
+			Collections.reverse(betterPath);
+			return betterPath;
+			
+		}else return null;
+		
 
 	}
 

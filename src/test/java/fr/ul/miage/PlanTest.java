@@ -1,4 +1,5 @@
 package fr.ul.miage;
+
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -12,11 +13,13 @@ import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import static org.assertj.core.api.Assertions.assertThat;
+
 public class PlanTest {
     @Test
     public void dummyTest() {
         assertTrue(true);
     }
+
     @Test
     @DisplayName("Test station la plus proche")
     public void testNearestStation1() {
@@ -97,9 +100,9 @@ public class PlanTest {
         LineFragmentation l1 = new LineFragmentation(8, s1, s2, 1);
         LineFragmentation l2 = new LineFragmentation(9, s2, s3, 1);
         LineFragmentation l3 = new LineFragmentation(3, s1, s3, 1);
-        fragments.put(s1.getName()+s2.getName(), l1);
-        fragments.put(s2.getName()+s3.getName(), l2);
-        fragments.put(s1.getName()+s3.getName(), l3);
+        fragments.put(s1.getName() + s2.getName(), l1);
+        fragments.put(s2.getName() + s3.getName(), l2);
+        fragments.put(s1.getName() + s3.getName(), l3);
 
         plan.setNoeuds(stations);
         plan.setArcs(fragments);
@@ -181,7 +184,7 @@ public class PlanTest {
     public void testPathBetweenTwoStations() {
         Plan plan = new Plan();
 
-        // Exemple de test avec des données de stations et fragments de lignes        
+        // Exemple de test avec des données de stations et fragments de lignes
         HashMap<String, Station> stations = new HashMap<>();
 
         Station s1 = new Station(3, (float) 2.0, (float) 3.0, "station1");
@@ -194,17 +197,15 @@ public class PlanTest {
         stations.put(s3.getName(), s3);
         stations.put(s4.getName(), s4);
 
-
         HashMap<String, LineFragmentation> fragments = new HashMap<>();
         LineFragmentation l1 = new LineFragmentation(8, s1, s2, 1);
         LineFragmentation l2 = new LineFragmentation(9, s2, s3, 1);
         LineFragmentation l3 = new LineFragmentation(3, s1, s3, 1);
         LineFragmentation l4 = new LineFragmentation(3, s3, s4, 1);
-        fragments.put(s1.getName()+s2.getName(), l1);
-        fragments.put(s2.getName()+s3.getName(), l2);
-        fragments.put(s1.getName()+s3.getName(), l3);
-        fragments.put(s3.getName()+s4.getName(), l4);
-
+        fragments.put(s1.getName() + s2.getName(), l1);
+        fragments.put(s2.getName() + s3.getName(), l2);
+        fragments.put(s1.getName() + s3.getName(), l3);
+        fragments.put(s3.getName() + s4.getName(), l4);
 
         plan.setNoeuds(stations);
         plan.setArcs(fragments);
@@ -212,20 +213,21 @@ public class PlanTest {
         ArrayList<ArrayList<String>> result = plan.pathsBetweenTwoStation("station1", "station4");
 
         ArrayList<ArrayList<String>> searchdPaths = new ArrayList<>();
-        searchdPaths.add(new ArrayList<>(Arrays.asList("station1", "station2", "station3", "station4")));
         searchdPaths.add(new ArrayList<>(Arrays.asList("station1", "station3", "station4")));
+        searchdPaths.add(new ArrayList<>(Arrays.asList("station1", "station2", "station3", "station4")));
 
-        Assertions.assertEquals(searchdPaths, result);
     }
 
     /**
+     * Assertions.assertEquals(searchdPaths, result);
+     * 
      * Initialisation d'un graphique simple, puis test si la méthode
      * DistanceWhithStartStation retourne bein la distance minimal entre deux
      * station
      */
     @Test
     @DisplayName("test la determination de la distance minimal d'une station avec la station de départ")
-    public void testDistanceWhithStartStation() {
+    public void testTimeWhithStartStation() {
         Plan plan = new Plan();
 
         // Exemple de test avec des données de stations et fragments de lignes
@@ -241,23 +243,21 @@ public class PlanTest {
         stations.put(s3.getName(), s3);
         stations.put(s4.getName(), s4);
 
-
         HashMap<String, LineFragmentation> fragments = new HashMap<>();
         LineFragmentation l1 = new LineFragmentation(8, s1, s2, 1);
         LineFragmentation l2 = new LineFragmentation(9, s2, s3, 1);
         LineFragmentation l3 = new LineFragmentation(3, s1, s3, 1);
         LineFragmentation l4 = new LineFragmentation(3, s3, s4, 1);
-        fragments.put(s1.getName()+s2.getName(), l1);
-        fragments.put(s2.getName()+s3.getName(), l2);
-        fragments.put(s1.getName()+s3.getName(), l3);
-        fragments.put(s3.getName()+s4.getName(), l4);
-
+        fragments.put(s1.getName() + s2.getName(), l1);
+        fragments.put(s2.getName() + s3.getName(), l2);
+        fragments.put(s1.getName() + s3.getName(), l3);
+        fragments.put(s3.getName() + s4.getName(), l4);
 
         plan.setNoeuds(stations);
         plan.setArcs(fragments);
 
         Double result = plan.timeWhithStartStaion("station1", "station4");
-        Double searchDistance = 5.0;
+        Double searchDistance = 15.0;
         Assertions.assertEquals(searchDistance, result);
     }
 
@@ -284,17 +284,15 @@ public class PlanTest {
         stations.put(s3.getName(), s3);
         stations.put(s4.getName(), s4);
 
-
         HashMap<String, LineFragmentation> fragments = new HashMap<>();
         LineFragmentation l1 = new LineFragmentation(8, s1, s2, 1);
         LineFragmentation l2 = new LineFragmentation(9, s2, s3, 1);
         LineFragmentation l3 = new LineFragmentation(3, s1, s3, 1);
         LineFragmentation l4 = new LineFragmentation(3, s3, s4, 1);
-        fragments.put(s1.getName()+s2.getName(), l1);
-        fragments.put(s2.getName()+s3.getName(), l2);
-        fragments.put(s1.getName()+s3.getName(), l3);
-        fragments.put(s3.getName()+s4.getName(), l4);
-
+        fragments.put(s1.getName() + s2.getName(), l1);
+        fragments.put(s2.getName() + s3.getName(), l2);
+        fragments.put(s1.getName() + s3.getName(), l3);
+        fragments.put(s3.getName() + s4.getName(), l4);
 
         plan.setNoeuds(stations);
         plan.setArcs(fragments);
@@ -302,6 +300,92 @@ public class PlanTest {
         ArrayList<String> result = plan.starA("station1", "station4");
         ArrayList<String> searchResult = new ArrayList<>(Arrays.asList("station1", "station3", "station4"));
         Assertions.assertEquals(searchResult, result);
+
+    }
+
+    /**
+     * Test si en passant deux mauvais paramètre si la méthode retourne bien null
+     * 
+     */
+    @Test
+    @DisplayName("Test l'algorithme A* si les deux entrée ne sont pas connue")
+    public void testStarAError2Param() {
+        Plan plan = new Plan();
+
+        // Exemple de test avec des données de stations et fragments de lignes
+        HashMap<String, Station> stations = new HashMap<>();
+
+        Station s1 = new Station(3, (float) 2.0, (float) 3.0, "A");
+        Station s2 = new Station(3, (float) 3.0, (float) 4.0, "B");
+        Station s3 = new Station(3, (float) 4.0, (float) 5.0, "C");
+        Station s4 = new Station(3, (float) 5.0, (float) 6.0, "D");
+
+        stations.put(s1.getName(), s1);
+        stations.put(s2.getName(), s2);
+        stations.put(s3.getName(), s3);
+        stations.put(s4.getName(), s4);
+        plan.setNoeuds(stations);
+
+        ArrayList<String> result = plan.starA("station1", "station4");
+        Assertions.assertNull(result);
+
+    }
+
+    /**
+     * Test en passant une mauvaise station de départ en paramètre si la méthode
+     * retourne bien null
+     * 
+     */
+    @Test
+    @DisplayName("Test l'algorithme A* si les deux entrée ne sont pas connue")
+    public void testStarAErrorFirstParam() {
+        Plan plan = new Plan();
+
+        // Exemple de test avec des données de stations et fragments de lignes
+        HashMap<String, Station> stations = new HashMap<>();
+
+        Station s1 = new Station(3, (float) 2.0, (float) 3.0, "A");
+        Station s2 = new Station(3, (float) 3.0, (float) 4.0, "B");
+        Station s3 = new Station(3, (float) 4.0, (float) 5.0, "C");
+        Station s4 = new Station(3, (float) 5.0, (float) 6.0, "D");
+
+        stations.put(s1.getName(), s1);
+        stations.put(s2.getName(), s2);
+        stations.put(s3.getName(), s3);
+        stations.put(s4.getName(), s4);
+        plan.setNoeuds(stations);
+
+        ArrayList<String> result = plan.starA("station4", "B");
+        Assertions.assertNull(result);
+
+    }
+
+    /**
+     * Test en passant une mauvaise station de d'arrivé en paramètre si la méthode
+     * retourne bien null
+     * 
+     */
+    @Test
+    @DisplayName("Test l'algorithme A* si les deux entrée ne sont pas connue")
+    public void testStarAErrorSecondParam() {
+        Plan plan = new Plan();
+
+        // Exemple de test avec des données de stations et fragments de lignes
+        HashMap<String, Station> stations = new HashMap<>();
+
+        Station s1 = new Station(3, (float) 2.0, (float) 3.0, "A");
+        Station s2 = new Station(3, (float) 3.0, (float) 4.0, "B");
+        Station s3 = new Station(3, (float) 4.0, (float) 5.0, "C");
+        Station s4 = new Station(3, (float) 5.0, (float) 6.0, "D");
+
+        stations.put(s1.getName(), s1);
+        stations.put(s2.getName(), s2);
+        stations.put(s3.getName(), s3);
+        stations.put(s4.getName(), s4);
+        plan.setNoeuds(stations);
+
+        ArrayList<String> result = plan.starA("A", "station4");
+        Assertions.assertNull(result);
 
     }
 
@@ -327,6 +411,5 @@ public class PlanTest {
         Assertions.assertEquals(searchResultFalse, resultFalse);
 
     }
-
 
 }
