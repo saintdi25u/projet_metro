@@ -163,11 +163,8 @@ public class App {
 
 		//App app = new App();
 		//app.menu(p);
-		ArrayList<String> a = p.starA("T", "V");
-		for (int i = 0; i < a.size(); i++) {
-			System.out.println(a.get(i));
-			
-		}
+						
+		ArrayList<String> a = p.itineraryFeweLineChanges("I", "B");
 		p.shapingPaths(a);
 	}
 }

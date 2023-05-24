@@ -412,4 +412,93 @@ public class PlanTest {
 
     }
 
+    /**
+     * Test la méthode itineraryFeweLineChanges
+     * si en passant deux mauvais paramètre si la méthode retourne bien null
+     * 
+     */
+    @Test
+    @DisplayName("Test l'algorithme itineraryFeweLineChanges si les deux entrée ne sont pas connue")
+    public void testItineraryFeweLineChanges2Param() {
+        Plan plan = new Plan();
+
+        // Exemple de test avec des données de stations et fragments de lignes
+        HashMap<String, Station> stations = new HashMap<>();
+
+        Station s1 = new Station(3, (float) 2.0, (float) 3.0, "A");
+        Station s2 = new Station(3, (float) 3.0, (float) 4.0, "B");
+        Station s3 = new Station(3, (float) 4.0, (float) 5.0, "C");
+        Station s4 = new Station(3, (float) 5.0, (float) 6.0, "D");
+
+        stations.put(s1.getName(), s1);
+        stations.put(s2.getName(), s2);
+        stations.put(s3.getName(), s3);
+        stations.put(s4.getName(), s4);
+        plan.setNoeuds(stations);
+
+        ArrayList<String> result = plan.itineraryFeweLineChanges("station1", "station4");
+        Assertions.assertNull(result);
+
+    }
+
+    /**
+     * Test la méthode itineraryFeweLineChanges
+     * Si en passant une mauvaise station de départ en paramètre si la méthode
+     * retourne bien null
+     * 
+     */
+    @Test
+    @DisplayName("Test l'algorithme itineraryFeweLineChanges si les deux entrée ne sont pas connue")
+    public void testItineraryFeweLineChangesFirstParam() {
+        Plan plan = new Plan();
+
+        // Exemple de test avec des données de stations et fragments de lignes
+        HashMap<String, Station> stations = new HashMap<>();
+
+        Station s1 = new Station(3, (float) 2.0, (float) 3.0, "A");
+        Station s2 = new Station(3, (float) 3.0, (float) 4.0, "B");
+        Station s3 = new Station(3, (float) 4.0, (float) 5.0, "C");
+        Station s4 = new Station(3, (float) 5.0, (float) 6.0, "D");
+
+        stations.put(s1.getName(), s1);
+        stations.put(s2.getName(), s2);
+        stations.put(s3.getName(), s3);
+        stations.put(s4.getName(), s4);
+        plan.setNoeuds(stations);
+
+        ArrayList<String> result = plan.itineraryFeweLineChanges("station4", "B");
+        Assertions.assertNull(result);
+
+    }
+
+    /**
+     * Test la méthode itineraryFeweLineChanges
+     * Si en passant une mauvaise station de d'arrivé en paramètre si la méthode
+     * retourne bien null
+     * 
+     */
+    @Test
+    @DisplayName("Test l'algorithme itineraryFeweLineChanges si les deux entrée ne sont pas connue")
+    public void testItineraryFeweLineChangesSecondParam() {
+        Plan plan = new Plan();
+
+        // Exemple de test avec des données de stations et fragments de lignes
+        HashMap<String, Station> stations = new HashMap<>();
+
+        Station s1 = new Station(3, (float) 2.0, (float) 3.0, "A");
+        Station s2 = new Station(3, (float) 3.0, (float) 4.0, "B");
+        Station s3 = new Station(3, (float) 4.0, (float) 5.0, "C");
+        Station s4 = new Station(3, (float) 5.0, (float) 6.0, "D");
+
+        stations.put(s1.getName(), s1);
+        stations.put(s2.getName(), s2);
+        stations.put(s3.getName(), s3);
+        stations.put(s4.getName(), s4);
+        plan.setNoeuds(stations);
+
+        ArrayList<String> result = plan.itineraryFeweLineChanges("A", "station4");
+        Assertions.assertNull(result);
+
+    }
+
 }
