@@ -22,7 +22,7 @@ public class PlanTest {
 
     @Test
     @DisplayName("Test station la plus proche")
-    public void testNearestStation1() {
+    public void testNearestStationWithoutIncident() {
         Plan p = new Plan();
         float initialX = 6;
         float initialY = 16;
@@ -34,6 +34,36 @@ public class PlanTest {
 
         stationNearest = p.getNearestStation(initialX, initialY);
         assertThat(stationNearest.getName()).isEqualTo("W");
+    }
+
+    @Test
+    @DisplayName("Test station la plus proche avec un incident juste à coté")
+    public void testNearestStationWithoutIncidentWithPutIncident() {
+        Plan p = new Plan();
+        float initialX = 6;
+        float initialY = 16;
+        p.getNoeuds().get("H").setIncident(new Incident("Incendie"));
+        Station stationNearest = p.getNearestStation(initialX, initialY);
+        assertThat(stationNearest.getName()).isEqualTo("N");
+        p.getNoeuds().get("N").setIncident(new Incident("Police"));
+        stationNearest = p.getNearestStation(initialX, initialY);
+        assertThat(stationNearest.getName()).isEqualTo("O");
+    }
+
+    @Test
+    @DisplayName("Test station la plus proche avec mauvaise saisie de l'utilisateur")
+    public void testNearestStationWithoutIncidentWithBadInputUser() {
+        Plan p = new Plan();
+        float initialX = Float.MAX_VALUE + 1;
+        float initialY = 16;
+        Station stationNearest = p.getNearestStation(initialX, initialY);
+        assertThat(stationNearest).isNull();
+
+        initialX = 10;
+        initialY = Float.MIN_VALUE - 1000;
+        stationNearest = p.getNearestStation(initialX, initialY);
+
+        assertThat(stationNearest).isNull();
     }
 
     /**

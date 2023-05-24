@@ -135,22 +135,20 @@ public class Plan {
 	 * @param posYInitial position Y de l'utilisateur
 	 * @return la station la plus proche qui ne contient pas d'incident
 	 */
-	// Code a factorisé
 	public Station getNearestStation(float posXInitial, float posYInitial) {
-		ArrayList<Station> stationsKnownsWithoutIncident = new ArrayList<Station>();
+		if (posXInitial < Float.MIN_VALUE || posXInitial > Float.MAX_VALUE || posYInitial < Float.MIN_VALUE
+				|| posYInitial > Float.MAX_VALUE) {
+			return null;
+		}
 		Station stationNearest = null;
 		float distance = Float.MAX_VALUE;
 		float distanceTmp;
-		// pour chaque ligne présent dans le plan
-		for (Map.Entry<String, Line> entryLine : this.lines.entrySet()) {
-			ArrayList<Station> listStation = entryLine.getValue().getAllStation();
-			for (Station station : listStation) {
-				if (!station.hasIncident()) {
-					distanceTmp = calculDistanceBetweenStation(posXInitial, posYInitial, station);
-					if (distanceTmp < distance) {
-						distance = distanceTmp;
-						stationNearest = station;
-					}
+		for (Map.Entry<String, Station> entryLine : this.noeuds.entrySet()) {
+			if (!entryLine.getValue().hasIncident()) {
+				distanceTmp = calculDistanceBetweenStation(posXInitial, posYInitial, entryLine.getValue());
+				if (distanceTmp < distance) {
+					distance = distanceTmp;
+					stationNearest = entryLine.getValue();
 				}
 			}
 		}
