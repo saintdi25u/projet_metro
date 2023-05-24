@@ -127,39 +127,49 @@ public class Plan {
 		return "Plan [lines=" + lines + "]";
 	}
 
+	/**
+	 * Méthode permettant de récupérer la station la plus proche qui ne contient pas
+	 * d'incident
+	 * 
+	 * @param posXInitial position X de l'utilisateur
+	 * @param posYInitial position Y de l'utilisateur
+	 * @return la station la plus proche qui ne contient pas d'incident
+	 */
 	// Code a factorisé
 	public Station getNearestStation(float posXInitial, float posYInitial) {
+		ArrayList<Station> stationsKnownsWithoutIncident = new ArrayList<Station>();
 		Station stationNearest = null;
 		float distance = Float.MAX_VALUE;
 		float distanceTmp;
-		ArrayList<String> stationsKnown = new ArrayList<String>();
 		// pour chaque ligne présent dans le plan
-		for (String line : this.lines.keySet()) {
-			// pour chaque fragment de ligne présent sur la ligne line
-			for (LineFragmentation lf : this.lines.get(line).getFragements()) {
-				if (!stationsKnown.contains(lf.getStartStation().getName())) {
-					Station startStation = lf.getStartStation();
-					distanceTmp = (float) Math.sqrt(Math.pow(startStation.getPositionX() - posXInitial, 2)
-							+ Math.pow(startStation.getPositionY() - posYInitial, 2));
+		for (Map.Entry<String, Line> entryLine : this.lines.entrySet()) {
+			ArrayList<Station> listStation = entryLine.getValue().getAllStation();
+			for (Station station : listStation) {
+				if (!station.hasIncident()) {
+					distanceTmp = calculDistanceBetweenStation(posXInitial, posYInitial, station);
 					if (distanceTmp < distance) {
 						distance = distanceTmp;
-						stationNearest = startStation;
+						stationNearest = station;
 					}
-					stationsKnown.add(startStation.getName());
-				}
-				if (!stationsKnown.contains(lf.getEndStation().getName())) {
-					Station endStation = lf.getEndStation();
-					distanceTmp = (float) Math.sqrt(Math.pow(endStation.getPositionX() - posXInitial, 2)
-							+ Math.pow(endStation.getPositionY() - posYInitial, 2));
-					if (distanceTmp < distance) {
-						distance = distanceTmp;
-						stationNearest = endStation;
-					}
-					stationsKnown.add(endStation.getName());
 				}
 			}
 		}
 		return stationNearest;
+	}
+
+	/**
+	 * Méthode permettant de calculer la distance entre les coordonées de
+	 * l'utilisateur et une station
+	 * 
+	 * @param posX    position X de l'utilisateur
+	 * @param posY    position Y de l'utilisateur
+	 * @param station station dont on veut connaitre ld distance
+	 * @return la distance
+	 */
+	public float calculDistanceBetweenStation(float posX, float posY, Station station) {
+		return (float) Math
+				.sqrt(Math.pow(station.getPositionX() - posX, 2)
+						+ Math.pow(station.getPositionY() - posY, 2));
 	}
 
 	/**
@@ -318,7 +328,8 @@ public class Plan {
 	 * 
 	 * @param startStation   : station de départ
 	 * @param currentStation : autre station
-	 * @return : retourne le temps de parcours le plus cours entre la station de départ et la
+	 * @return : retourne le temps de parcours le plus cours entre la station de
+	 *         départ et la
 	 *         station actuelle
 	 */
 	public Double timeWhithStartStaion(String startStation, String currentStation) {
@@ -337,19 +348,18 @@ public class Plan {
 					}
 				}
 			}
-			
+
 			int tempFragementsLigne = 0;
 			int tempArret = 0;
-			if (lines.size()>=1) {
-				 tempArret = lines.get(0).getStartStation().getStopTime();
+			if (lines.size() >= 1) {
+				tempArret = lines.get(0).getStartStation().getStopTime();
 			}
-			
-								
+
 			for (LineFragmentation lineFragmentation : lines) {
 				tempFragementsLigne = tempFragementsLigne + lineFragmentation.getTime();
-				tempArret = tempArret+lineFragmentation.getEndStation().getStopTime();
+				tempArret = tempArret + lineFragmentation.getEndStation().getStopTime();
 			}
-			distancePaths.add(tempFragementsLigne+tempArret);
+			distancePaths.add(tempFragementsLigne + tempArret);
 
 		}
 
@@ -374,7 +384,7 @@ public class Plan {
 	 *         noms des station qui compose le chemin le plus court
 	 */
 	public ArrayList<String> starA(String startStationName, String endStationName) {
-		
+
 		if (this.noeuds.containsKey(endStationName) && this.noeuds.containsKey(startStationName)) {
 			ArrayList<String> betterPath = new ArrayList<>();
 			HashMap<String, Double> pile = new HashMap<>();
@@ -434,9 +444,9 @@ public class Plan {
 			}
 			Collections.reverse(betterPath);
 			return betterPath;
-			
-		}else return null;
-		
+
+		} else
+			return null;
 
 	}
 
