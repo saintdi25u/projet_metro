@@ -143,12 +143,23 @@ public class Plan {
 		Station stationNearest = null;
 		float distance = Float.MAX_VALUE;
 		float distanceTmp;
-		for (Map.Entry<String, Station> entryLine : this.noeuds.entrySet()) {
-			if (!entryLine.getValue().hasIncident()) {
-				distanceTmp = calculDistanceBetweenStation(posXInitial, posYInitial, entryLine.getValue());
-				if (distanceTmp < distance) {
-					distance = distanceTmp;
-					stationNearest = entryLine.getValue();
+		HashMap<String, ArrayList<Station>> reachableStation = reachableStations();
+		for (Map.Entry<String, Station> entryStation : this.noeuds.entrySet()) {
+			System.out.println(entryStation.getKey());
+			if (!entryStation.getValue().hasIncident()) {
+				ArrayList<Station> station = reachableStation.get(entryStation.getValue().getName());
+				System.out.println(station);
+				for (int i = 0; i < station.size(); i++) {
+					if (!this.arcs.get(entryStation.getValue().getName() + station.get(i).getName())
+							.hasIncident()
+							|| !this.arcs.get(station.get(i).getName() + entryStation.getValue().getName())
+									.hasIncident()) {
+						distanceTmp = calculDistanceBetweenStation(posXInitial, posYInitial, entryStation.getValue());
+						if (distanceTmp < distance) {
+							distance = distanceTmp;
+							stationNearest = entryStation.getValue();
+						}
+					}
 				}
 			}
 		}
