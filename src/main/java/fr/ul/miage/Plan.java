@@ -128,39 +128,61 @@ public class Plan {
 		return "Plan [lines=" + lines + "]";
 	}
 
-	// Code a factorisé
-	public Station getNearestStation(float posXInitial, float posYInitial) {
+	/**
+	 * Méthode permettant de récupérer la station la plus proche qui ne contient pas
+	 * d'incident
+	 * 
+	 * @param posXInitial position X de l'utilisateur
+	 * @param posYInitial position Y de l'utilisateur
+	 * @return la station la plus proche qui ne contient pas d'incident
+	 */
+	public Station getNearestStation(float posXInitial, float posYInitial, ArrayList<Station> stationToDodge) {
+		if (posXInitial < Float.MIN_VALUE || posXInitial > Float.MAX_VALUE || posYInitial < Float.MIN_VALUE
+				|| posYInitial > Float.MAX_VALUE) {
+			return null;
+		}
 		Station stationNearest = null;
 		float distance = Float.MAX_VALUE;
 		float distanceTmp;
-		ArrayList<String> stationsKnown = new ArrayList<String>();
-		// pour chaque ligne présent dans le plan
-		for (String line : this.lines.keySet()) {
-			// pour chaque fragment de ligne présent sur la ligne line
-			for (LineFragmentation lf : this.lines.get(line).getFragements()) {
-				if (!stationsKnown.contains(lf.getStartStation().getName())) {
-					Station startStation = lf.getStartStation();
-					distanceTmp = (float) Math.sqrt(Math.pow(startStation.getPositionX() - posXInitial, 2)
-							+ Math.pow(startStation.getPositionY() - posYInitial, 2));
-					if (distanceTmp < distance) {
-						distance = distanceTmp;
-						stationNearest = startStation;
+		HashMap<String, ArrayList<Station>> reachableStation = reachableStations();
+		for (Map.Entry<String, Station> entryStation : this.noeuds.entrySet()) {
+			if (!stationToDodge.contains(entryStation.getValue())) {
+				if (!entryStation.getValue().hasIncident()) {
+					ArrayList<Station> station = reachableStation.get(entryStation.getValue().getName());
+					for (int i = 0; i < station.size(); i++) {
+						LineFragmentation lf = findLineFragmentation(entryStation.getValue().getName(),
+								station.get(i).getName());
+						if (!lf.hasIncident()) {
+							// if (!lf.getName().equals(station.get(i).getName() +
+							// entryStation.getValue().getName())) {
+							distanceTmp = calculDistanceBetweenStation(posXInitial, posYInitial,
+									entryStation.getValue());
+							if (distanceTmp < distance) {
+								distance = distanceTmp;
+								stationNearest = entryStation.getValue();
+							}
+							// }
+						}
 					}
-					stationsKnown.add(startStation.getName());
-				}
-				if (!stationsKnown.contains(lf.getEndStation().getName())) {
-					Station endStation = lf.getEndStation();
-					distanceTmp = (float) Math.sqrt(Math.pow(endStation.getPositionX() - posXInitial, 2)
-							+ Math.pow(endStation.getPositionY() - posYInitial, 2));
-					if (distanceTmp < distance) {
-						distance = distanceTmp;
-						stationNearest = endStation;
-					}
-					stationsKnown.add(endStation.getName());
 				}
 			}
 		}
 		return stationNearest;
+	}
+
+	/**
+	 * Méthode permettant de calculer la distance entre les coordonées de
+	 * l'utilisateur et une station
+	 * 
+	 * @param posX    position X de l'utilisateur
+	 * @param posY    position Y de l'utilisateur
+	 * @param station station dont on veut connaitre ld distance
+	 * @return la distance
+	 */
+	public float calculDistanceBetweenStation(float posX, float posY, Station station) {
+		return (float) Math
+				.sqrt(Math.pow(station.getPositionX() - posX, 2)
+						+ Math.pow(station.getPositionY() - posY, 2));
 	}
 
 	/**
@@ -319,7 +341,8 @@ public class Plan {
 	 * 
 	 * @param startStation   : station de départ
 	 * @param currentStation : autre station
-	 * @return : retourne le temps de parcours le plus cours entre la station de départ et la
+	 * @return : retourne le temps de parcours le plus cours entre la station de
+	 *         départ et la
 	 *         station actuelle
 	 */
 	public Double timeWhithStartStaion(String startStation, String currentStation) {
@@ -338,19 +361,18 @@ public class Plan {
 					}
 				}
 			}
-			
+
 			int tempFragementsLigne = 0;
 			int tempArret = 0;
-			if (lines.size()>=1) {
-				 tempArret = lines.get(0).getStartStation().getStopTime();
+			if (lines.size() >= 1) {
+				tempArret = lines.get(0).getStartStation().getStopTime();
 			}
-			
-								
+
 			for (LineFragmentation lineFragmentation : lines) {
 				tempFragementsLigne = tempFragementsLigne + lineFragmentation.getTime();
-				tempArret = tempArret+lineFragmentation.getEndStation().getStopTime();
+				tempArret = tempArret + lineFragmentation.getEndStation().getStopTime();
 			}
-			distancePaths.add(tempFragementsLigne+tempArret);
+			distancePaths.add(tempFragementsLigne + tempArret);
 
 		}
 
@@ -375,7 +397,7 @@ public class Plan {
 	 *         noms des station qui compose le chemin le plus court
 	 */
 	public ArrayList<String> starA(String startStationName, String endStationName) {
-		
+
 		if (this.noeuds.containsKey(endStationName) && this.noeuds.containsKey(startStationName)) {
 			ArrayList<String> betterPath = new ArrayList<>();
 			HashMap<String, Double> pile = new HashMap<>();
@@ -435,9 +457,9 @@ public class Plan {
 			}
 			Collections.reverse(betterPath);
 			return betterPath;
-			
-		}else return null;
-		
+
+		} else
+			return null;
 
 	}
 
@@ -678,5 +700,130 @@ public class Plan {
 	}
 	
 	
+
+	/**
+	 * Méhtode permettant de chercher si un fragement de ligne existe entre deux
+	 * station
+	 * 
+	 * @param startStation : nom de la station de depart
+	 * @param endStation   : nom de la station d'arrivé
+	 * @return : le fragement de ligne en question s'il existe, null sinon
+	 */
+	public LineFragmentation findLineFragmentation(String startStation, String endStation) {
+
+		if (this.arcs.containsKey(startStation + endStation)) {
+			return this.arcs.get(startStation + endStation);
+		} else {
+			if (this.arcs.containsKey(endStation + startStation)) {
+				return this.arcs.get(endStation + startStation);
+			} else
+				return null;
+		}
+	}
+
+	/**
+	 * Méhtode permettant de determiner le numéro de la ligne à laquel appartiens un
+	 * fragement de ligne
+	 * 
+	 * @param fragement : fragement de ligne concerné
+	 * @return : le numéro de la ligne qui contient le fragement de ligne
+	 */
+	public Integer numLine(LineFragmentation fragement) {
+		for (String cle : this.lines.keySet()) {
+			Line line = this.lines.get(cle);
+			for (int i = 0; i < line.getFragements().size(); i++) {
+				if (line.getFragements().get(i) == fragement) {
+					return line.getNumLine();
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Méhtode permettant de supprimer les element con sécutif en double d'une liste
+	 * d'integer
+	 * Par exemple si la liste contient (1,1,1,2,2,2,3,3,1,1) alors elle retournera
+	 * : (1,2,3,1)
+	 * 
+	 * @param list : liste d'integer à traiter
+	 * @return : la liste traité
+	 */
+	public ArrayList<Integer> findCahngeInThePaths(ArrayList<Integer> list) {
+		int decompte = list.size();
+		for (int i = 0; i < decompte - 1; i++) {
+			while (list.get(i) == list.get(i + 1)) {
+				list.remove(i + 1);
+				decompte--;
+				if (decompte == 1) {
+					break;
+				}
+
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Méhtode permettant de chercher l'itineraire ayant le moins de changement de
+	 * ligne entre deux stations.
+	 * 
+	 * @param startStation : nom de la station de depart
+	 * @param endStation   : nom de la station d'arrivé
+	 * @return : l'itineraire sous la forme d'une liste de string.
+	 */
+	public ArrayList<String> itineraryFeweLineChanges(String startStationName, String endStationName) {
+		if (this.noeuds.containsKey(endStationName) && this.noeuds.containsKey(startStationName)) {
+			ArrayList<String> itinerary = new ArrayList<>();
+			ArrayList<ArrayList<String>> paths = pathsBetweenTwoStation(startStationName, endStationName);
+
+			for (int i = 0; i < paths.size(); i++) {
+				for (int j = 0; j < paths.get(i).size(); j++) {
+					if (this.noeuds.get(paths.get(i).get(j)).hasIncident()) {
+						paths.remove(i);
+						break;
+					}
+					if (j < paths.get(i).size() - 1) {
+						if (findLineFragmentation(this.noeuds.get(paths.get(i).get(j)).getName(),
+								this.noeuds.get(paths.get(i).get(j + 1)).getName()).hasIncident()) {
+							paths.remove(i);
+							break;
+						}
+					}
+
+				}
+			}
+
+			ArrayList<Integer> numChangements = new ArrayList<>();
+			for (ArrayList<String> path : paths) {
+				ArrayList<Integer> numsLine = new ArrayList<>();
+				for (int i = 0; i < path.size() - 1; i++) {
+					LineFragmentation line = findLineFragmentation(path.get(i), path.get(i + 1));
+					numsLine.add(numLine(line));
+				}
+				// suppression des doublons :
+
+				numsLine = findCahngeInThePaths(numsLine);
+				// ajout dans la liste le nombre de changement de ligne pour ce chemin
+				numChangements.add(numsLine.size());
+
+			}
+
+			int position = 0;
+			int smallestElement = numChangements.get(0);
+
+			for (int i = 1; i < numChangements.size(); i++) {
+				if (numChangements.get(i) < smallestElement) {
+					smallestElement = numChangements.get(i);
+					position = i;
+				}
+			}
+
+			return paths.get(position);
+
+		} else
+			return null;
+	}
 
 }
