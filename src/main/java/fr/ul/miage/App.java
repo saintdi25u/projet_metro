@@ -163,10 +163,24 @@ public class App {
 
 		Plan p = new Plan();
 
+
 		App app = new App();
 		app.menu(p);
 
-		// ArrayList<String> a = p.itineraryFeweLineChanges("I", "B");
-		// p.shapingPaths(a);
+
+//		ArrayList<String> a = p.itineraryFeweLineChanges("T", "E");
+//		if (a==null) {
+//			System.out.println("oui");
+//		}else {
+//			
+//			p.shapingPaths(a);
+//		
+//		}
+////	
+		//Incident i = new Incident("test");
+		//p.getArcs().get("CD").setIncident(i);
+		p.findTheFinalPath(21,3,"R", "itineraryFeweLineChanges");
+		//p.shapingPaths(a);
+
 	}
 }
