@@ -95,6 +95,8 @@ public class App {
 						System.out.println("Latitude enregistré.");
 						setPositionY(c.setPositionYByUser(s, p));
 						System.out.println("Longitude enregistré.");
+						System.out.println(
+								"Voici vos coordonées actuelle : (" + this.positionX + "," + this.positionY + ")");
 						break;
 					case 3:
 						admin = false;
@@ -161,10 +163,10 @@ public class App {
 
 		Plan p = new Plan();
 
-		//App app = new App();
-		//app.menu(p);
-						
-		ArrayList<String> a = p.itineraryFeweLineChanges("I", "B");
-		p.shapingPaths(a);
+		App app = new App();
+		app.menu(p);
+
+		// ArrayList<String> a = p.itineraryFeweLineChanges("I", "B");
+		// p.shapingPaths(a);
 	}
 }

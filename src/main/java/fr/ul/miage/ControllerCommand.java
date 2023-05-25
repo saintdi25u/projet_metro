@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Scanner;
 
+import javax.naming.spi.DirStateFactory.Result;
+
 public class ControllerCommand {
 
     /**
@@ -34,8 +36,8 @@ public class ControllerCommand {
         String station = s.nextLine();
         Station res = null;
         try {
-           res = plan.getNoeuds().get(station.toUpperCase());
-           res.setIncident(incident);
+            res = plan.getNoeuds().get(station.toUpperCase());
+            res.setIncident(incident);
             System.out.println("Incident créé avec succès sur la station " + res.getName());
         } catch (Exception e) {
             System.out.println("Cette station n'existe pas, veulliez choisir une station de la liste");
@@ -167,7 +169,16 @@ public class ControllerCommand {
 
     public double setPositionXByUser(Scanner s, Plan p) {
         System.out.println("Veuillez rentrer votre latitude.");
-        return s.nextDouble();
+        s = new Scanner(System.in);
+        double result = 0;
+        try {
+            result = s.nextDouble();
+        } catch (Exception e) {
+            System.out.println("Erreur, Veuillez rentrer un nombre");
+            setPositionXByUser(s, p);
+        }
+        return result;
+
     }
 
     /**
@@ -179,6 +190,14 @@ public class ControllerCommand {
      */
     public double setPositionYByUser(Scanner s, Plan p) {
         System.out.println("Veuillez rentrer votre longitude.");
-        return s.nextDouble();
+        s = new Scanner(System.in);
+        double res = 0;
+        try {
+            res = s.nextDouble();
+        } catch (Exception e) {
+            System.out.println("Erreur, veuillez rentrer un nombre");
+            setPositionYByUser(s, p);
+        }
+        return res;
     }
 }
