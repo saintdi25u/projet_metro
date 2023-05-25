@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
@@ -26,13 +27,13 @@ public class PlanTest {
         Plan p = new Plan();
         float initialX = 6;
         float initialY = 16;
-        Station stationNearest = p.getNearestStation(initialX, initialY);
+        Station stationNearest = p.getNearestStation(initialX, initialY, new ArrayList<Station>());
         assertThat(stationNearest.getName()).isEqualTo("H");
 
         initialX = 30;
         initialY = 29;
 
-        stationNearest = p.getNearestStation(initialX, initialY);
+        stationNearest = p.getNearestStation(initialX, initialY, new ArrayList<Station>());
         assertThat(stationNearest.getName()).isEqualTo("W");
     }
 
@@ -43,10 +44,10 @@ public class PlanTest {
         float initialX = 6;
         float initialY = 16;
         p.getNoeuds().get("H").setIncident(new Incident("Incendie"));
-        Station stationNearest = p.getNearestStation(initialX, initialY);
+        Station stationNearest = p.getNearestStation(initialX, initialY, new ArrayList<Station>());
         assertThat(stationNearest.getName()).isEqualTo("N");
         p.getNoeuds().get("N").setIncident(new Incident("Police"));
-        stationNearest = p.getNearestStation(initialX, initialY);
+        stationNearest = p.getNearestStation(initialX, initialY, new ArrayList<Station>());
         assertThat(stationNearest.getName()).isEqualTo("O");
     }
 
@@ -56,14 +57,42 @@ public class PlanTest {
         Plan p = new Plan();
         float initialX = Float.MAX_VALUE + 1;
         float initialY = 16;
-        Station stationNearest = p.getNearestStation(initialX, initialY);
+        Station stationNearest = p.getNearestStation(initialX, initialY, new ArrayList<Station>());
         assertThat(stationNearest).isNull();
 
         initialX = 10;
         initialY = Float.MIN_VALUE - 1000;
-        stationNearest = p.getNearestStation(initialX, initialY);
+        stationNearest = p.getNearestStation(initialX, initialY, new ArrayList<Station>());
 
         assertThat(stationNearest).isNull();
+    }
+
+    @Test
+    @DisplayName("Test station la plus proche avec incident sur un fragment de ligne")
+    public void testNearestStationWithoutIncidentWithIncidentOnLineFragmentation() {
+        Plan p = new Plan();
+        float initialX = 18;
+        float initialY = 19;
+        p.getArcs().get("BC").setIncident(new Incident("Incendie")); // On met unincident sur le fragment de ligne BC
+        Station stationNearest = p.getNearestStation(initialX, initialY, new ArrayList<Station>());
+        assertThat(stationNearest.getName()).isEqualTo("A");
+    }
+
+    @Test
+    @DisplayName("Test station la plus proche avec incident sur un fragment de ligne")
+    public void testNearestStationWithoutIncidentWithIncidentOnLineFragmentation2() {
+        Plan p = new Plan();
+        float initialX = 23;
+        float initialY = 10;
+        p.getArcs().get("JK").setIncident(new Incident("Incendie")); // On met un incident sur le fragment de ligne BC
+        p.getArcs().get("JU").setIncident(new Incident("Incendie"));
+        p.getArcs().get("TJ").setIncident(new Incident("Incendie"));
+        p.getArcs().get("IJ").setIncident(new Incident("Incendie"));
+        ArrayList<Station> stationsToDodge = new ArrayList<Station>();
+        stationsToDodge.add(p.getNoeuds().get("U"));
+        stationsToDodge.add(p.getNoeuds().get("T"));
+        Station stationNearest = p.getNearestStation(initialX, initialY, stationsToDodge);
+        assertThat(stationNearest.getName()).isEqualTo("K");
     }
 
     /**

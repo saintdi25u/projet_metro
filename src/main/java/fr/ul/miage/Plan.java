@@ -136,7 +136,7 @@ public class Plan {
 	 * @param posYInitial position Y de l'utilisateur
 	 * @return la station la plus proche qui ne contient pas d'incident
 	 */
-	public Station getNearestStation(float posXInitial, float posYInitial) {
+	public Station getNearestStation(float posXInitial, float posYInitial, ArrayList<Station> stationToDodge) {
 		if (posXInitial < Float.MIN_VALUE || posXInitial > Float.MAX_VALUE || posYInitial < Float.MIN_VALUE
 				|| posYInitial > Float.MAX_VALUE) {
 			return null;
@@ -146,19 +146,22 @@ public class Plan {
 		float distanceTmp;
 		HashMap<String, ArrayList<Station>> reachableStation = reachableStations();
 		for (Map.Entry<String, Station> entryStation : this.noeuds.entrySet()) {
-			System.out.println(entryStation.getKey());
-			if (!entryStation.getValue().hasIncident()) {
-				ArrayList<Station> station = reachableStation.get(entryStation.getValue().getName());
-				System.out.println(station);
-				for (int i = 0; i < station.size(); i++) {
-					if (!this.arcs.get(entryStation.getValue().getName() + station.get(i).getName())
-							.hasIncident()
-							|| !this.arcs.get(station.get(i).getName() + entryStation.getValue().getName())
-									.hasIncident()) {
-						distanceTmp = calculDistanceBetweenStation(posXInitial, posYInitial, entryStation.getValue());
-						if (distanceTmp < distance) {
-							distance = distanceTmp;
-							stationNearest = entryStation.getValue();
+			if (!stationToDodge.contains(entryStation.getValue())) {
+				if (!entryStation.getValue().hasIncident()) {
+					ArrayList<Station> station = reachableStation.get(entryStation.getValue().getName());
+					for (int i = 0; i < station.size(); i++) {
+						LineFragmentation lf = findLineFragmentation(entryStation.getValue().getName(),
+								station.get(i).getName());
+						if (!lf.hasIncident()) {
+							// if (!lf.getName().equals(station.get(i).getName() +
+							// entryStation.getValue().getName())) {
+							distanceTmp = calculDistanceBetweenStation(posXInitial, posYInitial,
+									entryStation.getValue());
+							if (distanceTmp < distance) {
+								distance = distanceTmp;
+								stationNearest = entryStation.getValue();
+							}
+							// }
 						}
 					}
 				}
@@ -580,27 +583,31 @@ public class Plan {
 			return null;
 		}
 	}
-	
+
 	/**
-	 * Méhtode permettant de chercher si un fragement de ligne existe entre deux station
+	 * Méhtode permettant de chercher si un fragement de ligne existe entre deux
+	 * station
+	 * 
 	 * @param startStation : nom de la station de depart
-	 *  @param endStation : nom de la station d'arrivé
+	 * @param endStation   : nom de la station d'arrivé
 	 * @return : le fragement de ligne en question s'il existe, null sinon
 	 */
 	public LineFragmentation findLineFragmentation(String startStation, String endStation) {
-		
-		if (this.arcs.containsKey(startStation+endStation)) {
-			return this.arcs.get(startStation+endStation);
-		}else {
-			if (this.arcs.containsKey(endStation+startStation)) {
-				return this.arcs.get(endStation+startStation);
-			}else return null;
+
+		if (this.arcs.containsKey(startStation + endStation)) {
+			return this.arcs.get(startStation + endStation);
+		} else {
+			if (this.arcs.containsKey(endStation + startStation)) {
+				return this.arcs.get(endStation + startStation);
+			} else
+				return null;
 		}
-		
 	}
-	
+
 	/**
-	 * Méhtode permettant de determiner le numéro de la ligne à laquel appartiens un fragement de ligne
+	 * Méhtode permettant de determiner le numéro de la ligne à laquel appartiens un
+	 * fragement de ligne
+	 * 
 	 * @param fragement : fragement de ligne concerné
 	 * @return : le numéro de la ligne qui contient le fragement de ligne
 	 */
@@ -609,93 +616,97 @@ public class Plan {
 			Line line = this.lines.get(cle);
 			for (int i = 0; i < line.getFragements().size(); i++) {
 				if (line.getFragements().get(i) == fragement) {
-					return line.getNumLine();					
+					return line.getNumLine();
 				}
 			}
 		}
 		return null;
 	}
+
 	/**
-	 * Méhtode permettant de supprimer les element con sécutif en double d'une liste d'integer
-	 * Par exemple si la liste contient (1,1,1,2,2,2,3,3,1,1) alors elle retournera : (1,2,3,1)
+	 * Méhtode permettant de supprimer les element con sécutif en double d'une liste
+	 * d'integer
+	 * Par exemple si la liste contient (1,1,1,2,2,2,3,3,1,1) alors elle retournera
+	 * : (1,2,3,1)
+	 * 
 	 * @param list : liste d'integer à traiter
 	 * @return : la liste traité
 	 */
-	public ArrayList<Integer> findCahngeInThePaths(ArrayList<Integer> list) {       
-			int decompte = list.size();
-	        for (int i = 0; i < decompte-1; i++) {	            
-	            while (list.get(i) == list.get(i + 1)) {
-	                list.remove(i+1);
-	                decompte--;
-	                if (decompte==1) {
-						break;
-					}
-	                
-	            }
-	        }
-	        	       
-	        return list;
-    }
-	
-	
+	public ArrayList<Integer> findCahngeInThePaths(ArrayList<Integer> list) {
+		int decompte = list.size();
+		for (int i = 0; i < decompte - 1; i++) {
+			while (list.get(i) == list.get(i + 1)) {
+				list.remove(i + 1);
+				decompte--;
+				if (decompte == 1) {
+					break;
+				}
+
+			}
+		}
+
+		return list;
+	}
+
 	/**
-	 * Méhtode permettant de chercher l'itineraire ayant le moins de changement de ligne entre deux stations. 
+	 * Méhtode permettant de chercher l'itineraire ayant le moins de changement de
+	 * ligne entre deux stations.
+	 * 
 	 * @param startStation : nom de la station de depart
-	 * @param endStation : nom de la station d'arrivé
+	 * @param endStation   : nom de la station d'arrivé
 	 * @return : l'itineraire sous la forme d'une liste de string.
 	 */
-	public ArrayList<String> itineraryFeweLineChanges(String startStationName, String endStationName){
+	public ArrayList<String> itineraryFeweLineChanges(String startStationName, String endStationName) {
 		if (this.noeuds.containsKey(endStationName) && this.noeuds.containsKey(startStationName)) {
-			ArrayList<String> itinerary = new ArrayList<>();		
-			ArrayList<ArrayList<String>> paths = pathsBetweenTwoStation(startStationName,  endStationName);
-			
+			ArrayList<String> itinerary = new ArrayList<>();
+			ArrayList<ArrayList<String>> paths = pathsBetweenTwoStation(startStationName, endStationName);
+
 			for (int i = 0; i < paths.size(); i++) {
 				for (int j = 0; j < paths.get(i).size(); j++) {
 					if (this.noeuds.get(paths.get(i).get(j)).hasIncident()) {
 						paths.remove(i);
 						break;
 					}
-					if (j<paths.get(i).size()-1) {
-						if (findLineFragmentation(this.noeuds.get(paths.get(i).get(j)).getName(), this.noeuds.get(paths.get(i).get(j+1)).getName()).hasIncident()) {
+					if (j < paths.get(i).size() - 1) {
+						if (findLineFragmentation(this.noeuds.get(paths.get(i).get(j)).getName(),
+								this.noeuds.get(paths.get(i).get(j + 1)).getName()).hasIncident()) {
 							paths.remove(i);
 							break;
 						}
 					}
-					
+
 				}
 			}
-			
-			
+
 			ArrayList<Integer> numChangements = new ArrayList<>();
 			for (ArrayList<String> path : paths) {
 				ArrayList<Integer> numsLine = new ArrayList<>();
-				for (int i = 0; i < path.size()-1; i++) {
-					LineFragmentation line =  findLineFragmentation(path.get(i), path.get(i+1));
+				for (int i = 0; i < path.size() - 1; i++) {
+					LineFragmentation line = findLineFragmentation(path.get(i), path.get(i + 1));
 					numsLine.add(numLine(line));
 				}
-				//suppression des doublons : 
-				
+				// suppression des doublons :
+
 				numsLine = findCahngeInThePaths(numsLine);
-				//ajout dans la liste le nombre de changement de ligne pour ce chemin			
+				// ajout dans la liste le nombre de changement de ligne pour ce chemin
 				numChangements.add(numsLine.size());
-				
+
 			}
-			
+
 			int position = 0;
-	        int smallestElement = numChangements.get(0);
-	
-	        for (int i = 1; i < numChangements.size(); i++) {
-	            if (numChangements.get(i) < smallestElement) {
-	                smallestElement = numChangements.get(i);
-	                position = i;
-	            }
-	        }
-			
+			int smallestElement = numChangements.get(0);
+
+			for (int i = 1; i < numChangements.size(); i++) {
+				if (numChangements.get(i) < smallestElement) {
+					smallestElement = numChangements.get(i);
+					position = i;
+				}
+			}
+
 			return paths.get(position);
-			
-		}else return null;
+
+		} else
+			return null;
 	}
-	
-	
 
 }
