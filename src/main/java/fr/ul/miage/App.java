@@ -83,7 +83,8 @@ public class App {
 		while (admin) {
 			System.out.println("Si vous souhaitez saisir vos préférence de trajet, taper 1");
 			System.out.println("Si vous souhaitez vous faire localiser, taper 2");
-			System.out.println("Si vous souhaitez sortir du menu utilisateur, taper 3");
+			System.out.println("Si vous souhaitez effectuer un trajet avec plusieurs étape, taper 3");
+			System.out.println("Si vous souhaitez sortir du menu utilisateur, taper 4");
 			try {
 				int choix = Integer.parseInt(s.nextLine());
 				switch (choix) {
@@ -97,6 +98,9 @@ public class App {
 						System.out.println("Longitude enregistré.");
 						break;
 					case 3:
+						c.pathWithStep(s, p, preference);
+						break;
+					case 4:
 						admin = false;
 						System.out.println("Vous quittez le menu utilisateur");
 						break;

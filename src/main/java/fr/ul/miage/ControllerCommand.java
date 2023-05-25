@@ -181,4 +181,41 @@ public class ControllerCommand {
         System.out.println("Veuillez rentrer votre longitude.");
         return s.nextDouble();
     }
+
+    public void pathWithStep(Scanner s, Plan p, String pref) {
+        System.out.println("Combien d'étape voulez-vous faire ?\n");
+        System.out.println("Vous ne pouvez saisir que 3 étapes maximum\n");
+        int nbStep = 0;
+        try {
+            nbStep = s.nextInt();
+            if (nbStep > 3 || nbStep <= 0) {
+                throw new Exception();
+            }
+        } catch (Exception e) {
+            System.out.println("Veuillez saisir un nombre d'étape valide\n");
+            pathWithStep(s, p, pref);
+        }
+        ArrayList<ArrayList<String>> path = new ArrayList<ArrayList<String>>();
+        switch (pref) {
+            case "rapide" :
+                System.out.println("Veuillez saisir votre station de départ");
+                String departureStation = s.nextLine();
+                for (int i = 0; i < nbStep; i++) {
+                    System.out.println("Veuillez saisir votre " + i+1 + "e arrêt");
+                    String step = s.nextLine();
+                    path.add(p.starA(departureStation, step));
+                }
+                break;
+            case "changement":
+                for (int i = 0; i < nbStep; i++) {
+
+                }
+                break;
+        }
+        System.out.println("Voici le trajet que vous devrait emprunter pour ralier les stations demandées :");
+        for (int i = 0; i < nbStep; i++) {
+            System.out.println("Pour aller jusqu'au " + i+1 + "e arrêt");
+            p.shapingPaths(path.get(i));
+        }
+    }
 }
