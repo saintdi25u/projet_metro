@@ -199,12 +199,16 @@ public class ControllerCommand {
         switch (pref) {
             case "rapide" :
                 System.out.println("Veuillez saisir votre station de départ");
-                String departureStation = s.nextLine();
+                String departureStation = checkStation(p, s);
                 for (int i = 0; i < nbStep; i++) {
                     System.out.println("Veuillez saisir votre " + i+1 + "e arrêt");
-                    String step = s.nextLine();
+                    String step = checkStation(p, s);
                     path.add(p.starA(departureStation, step));
+                    departureStation = step;
                 }
+                System.out.println("Veuillez saisir votre station de départ");
+                String arrivalStation = checkStation(p, s);
+                path.add(p.starA(departureStation, arrivalStation));
                 break;
             case "changement":
                 for (int i = 0; i < nbStep; i++) {
@@ -216,6 +220,31 @@ public class ControllerCommand {
         for (int i = 0; i < nbStep; i++) {
             System.out.println("Pour aller jusqu'au " + i+1 + "e arrêt");
             p.shapingPaths(path.get(i));
+        }
+    }
+
+    public String checkStation(Plan p, Scanner s) {
+        String station = s.nextLine();
+        while(p.getNoeuds().get(station) == null){
+            System.out.println("Station invalide");
+            System.out.println("Veuillez saisir votre station de départ");
+            station = s.nextLine();
+        }
+        return station;
+    }
+
+    public void findPath(Scanner s, Plan p, String pref) {
+        System.out.println("Veuillez saisir votre station de départ");
+        String departureStation = checkStation(p, s);
+        System.out.println("Veuillez saisir votre station d'arrivée");
+        String arrivalStation = checkStation(p, s);
+        switch(pref){
+            case "rapide":
+                p.shapingPaths(p.starA(departureStation, arrivalStation));
+                break;
+            case "changement":
+
+                break;
         }
     }
 }
