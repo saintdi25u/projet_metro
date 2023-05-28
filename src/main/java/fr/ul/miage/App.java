@@ -1,31 +1,29 @@
 package fr.ul.miage;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Scanner;
 
 public class App {
 	private String preference = "rapide";
-	private double positionX;
-	private double positionY;
+	private float positionX;
+	private float positionY;
 
 	public String getPreference() {
 		return preference;
 	}
 
-	public double getPositionX() {
+	public float getPositionX() {
 		return positionX;
 	}
 
-	public void setPositionX(double positionX) {
+	public void setPositionX(float positionX) {
 		this.positionX = positionX;
 	}
 
-	public double getPositionY() {
+	public float getPositionY() {
 		return positionY;
 	}
 
-	public void setPositionY(double positionY) {
+	public void setPositionY(float positionY) {
 		this.positionY = positionY;
 	}
 
@@ -101,10 +99,10 @@ public class App {
 								"Voici vos coordonées actuelle : (" + this.positionX + "," + this.positionY + ")");
 						break;
 					case 3:
-						c.pathWithStep(s, p, preference);
+						c.pathWithStep(s, p, preference, this.positionX, this.positionY);
 						break;
 					case 4:
-						c.findPath(s, p, preference);
+						c.findPath(s, p, preference, this.positionX, this.positionY);
 						break;
 					case 5:
 						admin = false;

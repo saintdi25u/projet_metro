@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Scanner;
 
-import javax.naming.spi.DirStateFactory.Result;
-
 public class ControllerCommand {
 
     /**
@@ -167,12 +165,12 @@ public class ControllerCommand {
      * @return la latitude rentré par l'utilisateur
      */
 
-    public double setPositionXByUser(Scanner s, Plan p) {
+    public float setPositionXByUser(Scanner s, Plan p) {
         System.out.println("Veuillez rentrer votre latitude.");
         s = new Scanner(System.in);
-        double result = 0;
+        float result = 0;
         try {
-            result = s.nextDouble();
+            result = s.nextFloat();
         } catch (Exception e) {
             System.out.println("Erreur, Veuillez rentrer un nombre");
             setPositionXByUser(s, p);
@@ -188,12 +186,12 @@ public class ControllerCommand {
      * @param p le plan
      * @return la longitude rentré par l'utilisateur
      */
-    public double setPositionYByUser(Scanner s, Plan p) {
+    public float setPositionYByUser(Scanner s, Plan p) {
         System.out.println("Veuillez rentrer votre longitude.");
         s = new Scanner(System.in);
-        double res = 0;
+        float res = 0;
         try {
-            res = s.nextDouble();
+            res = s.nextFloat();
         } catch (Exception e) {
             System.out.println("Erreur, veuillez rentrer un nombre");
             setPositionYByUser(s, p);
@@ -201,7 +199,7 @@ public class ControllerCommand {
         return res;
     }
 
-    public void pathWithStep(Scanner s, Plan p, String pref) {
+    public void pathWithStep(Scanner s, Plan p, String pref, Float positionX, Float positionY) {
         System.out.println("Combien d'étape voulez-vous faire ?\n");
         System.out.println("Vous ne pouvez saisir que 3 étapes maximum\n");
         int nbStep = 0;
@@ -212,39 +210,25 @@ public class ControllerCommand {
             }
         } catch (Exception e) {
             System.out.println("Veuillez saisir un nombre d'étape valide\n");
-            pathWithStep(s, p, pref);
+            pathWithStep(s, p, pref, positionX, positionY);
         }
-        ArrayList<ArrayList<String>> path = new ArrayList<ArrayList<String>>();
-        switch (pref) {
-            case "rapide" :
-                System.out.println("Veuillez saisir votre station de départ");
-                String departureStation = checkStation(p, s);
-                for (int i = 0; i < nbStep; i++) {
-                    System.out.println("Veuillez saisir votre " + i+1 + "e arrêt");
-                    String step = checkStation(p, s);
-                    path.add(p.starA(departureStation, step));
-                    departureStation = step;
-                }
-                System.out.println("Veuillez saisir votre station de départ");
-                String arrivalStation = checkStation(p, s);
-                path.add(p.starA(departureStation, arrivalStation));
-                break;
-            case "changement":
-                for (int i = 0; i < nbStep; i++) {
-
-                }
-                break;
-        }
-        System.out.println("Voici le trajet que vous devrait emprunter pour ralier les stations demandées :");
+        float x = positionX;
+        float y = positionY;
         for (int i = 0; i < nbStep; i++) {
-            System.out.println("Pour aller jusqu'au " + i+1 + "e arrêt");
-            p.shapingPaths(path.get(i));
+            System.out.println("Veuillez saisir votre " + i + 1 + "e arrêt");
+            String step = checkStation(p, s);
+            p.findTheFinalPath(x, y, pref, step);
+            x = p.getNoeuds().get(step).getPositionX();
+            y = p.getNoeuds().get(step).getPositionY();
         }
+        System.out.println("Veuillez saisir votre station de départ");
+        String arrivalStation = checkStation(p, s);
+        p.findTheFinalPath(x, y, pref, arrivalStation);
     }
 
     public String checkStation(Plan p, Scanner s) {
         String station = s.nextLine();
-        while(p.getNoeuds().get(station) == null){
+        while (p.getNoeuds().get(station) == null) {
             System.out.println("Station invalide");
             System.out.println("Veuillez saisir votre station de départ");
             station = s.nextLine();
@@ -252,18 +236,9 @@ public class ControllerCommand {
         return station;
     }
 
-    public void findPath(Scanner s, Plan p, String pref) {
-        System.out.println("Veuillez saisir votre station de départ");
-        String departureStation = checkStation(p, s);
+    public void findPath(Scanner s, Plan p, String pref, Float positionX, Float positionY) {
         System.out.println("Veuillez saisir votre station d'arrivée");
         String arrivalStation = checkStation(p, s);
-        switch(pref){
-            case "rapide":
-                p.shapingPaths(p.starA(departureStation, arrivalStation));
-                break;
-            case "changement":
-
-                break;
-        }
+        p.findTheFinalPath(positionX, positionY, pref, arrivalStation);
     }
 }

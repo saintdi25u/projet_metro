@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -397,8 +396,7 @@ public class Plan {
 	 *         noms des station qui compose le chemin le plus court
 	 */
 	public ArrayList<String> starA(String startStationName, String endStationName) {
-		
-		
+
 		if (this.noeuds.containsKey(endStationName) && this.noeuds.containsKey(startStationName)) {
 			ArrayList<String> betterPath = new ArrayList<>();
 			HashMap<String, Double> pile = new HashMap<>();
@@ -406,8 +404,7 @@ public class Plan {
 			HashMap<String, String> father = new HashMap<>();
 			HashMap<String, ArrayList<Station>> reachableStations = reachableStations();
 			majLignesFragmentation();
-			
-			
+
 			HashMap<String, Double> distanceAVoleDOiseau = distanceAFlightBird(endStationName);
 
 			HashMap<String, Station> node = new HashMap<>();
@@ -441,10 +438,8 @@ public class Plan {
 						}
 
 					}
-				}else return null;
-					
-				
-				
+				} else
+					return null;
 
 				if (pile.containsKey(endStationName)) {
 
@@ -464,10 +459,10 @@ public class Plan {
 
 			}
 			Collections.reverse(betterPath);
-			if (betterPath.size()==0) {
+			if (betterPath.size() == 0) {
 				return null;
-			}else
-			return betterPath;
+			} else
+				return betterPath;
 
 		} else
 			return null;
@@ -565,9 +560,12 @@ public class Plan {
 		}
 		String result = "";
 		for (int i = 0; i < finalNumLine.size(); i++) {
-			result = result + "Prendre la ligne " + finalNumLine.get(i) +" de la station " +finalTransformPath.get(i).get(0) + " jusqu'a la station "+ finalTransformPath.get(i).get(1) +"\n";
-			//System.out.println(finalNumLine.get(i) + " : " + finalTransformPath.get(i).get(0) + " " 
-				//	+ finalTransformPath.get(i).get(1));
+			result = result + "Prendre la ligne " + finalNumLine.get(i) + " de la station "
+					+ finalTransformPath.get(i).get(0) + " jusqu'a la station " + finalTransformPath.get(i).get(1)
+					+ "\n";
+			// System.out.println(finalNumLine.get(i) + " : " +
+			// finalTransformPath.get(i).get(0) + " "
+			// + finalTransformPath.get(i).get(1));
 		}
 		return result;
 	}
@@ -645,17 +643,16 @@ public class Plan {
 	 * @return : la liste traité
 	 */
 	public ArrayList<Integer> findCahngeInThePaths(ArrayList<Integer> list) {
-		int decompte = list.size();		
-		sortie:for (int i = 0; i < decompte -1; i++) {
+		int decompte = list.size();
+		sortie: for (int i = 0; i < decompte - 1; i++) {
 			while (list.get(i) == list.get(i + 1)) {
-				
+
 				list.remove(i + 1);
-			
+
 				decompte--;
-				if (decompte == 1 || i == decompte-1) {
+				if (decompte == 1 || i == decompte - 1) {
 					break sortie;
 				}
-				
 
 			}
 		}
@@ -675,7 +672,7 @@ public class Plan {
 		if (this.noeuds.containsKey(endStationName) && this.noeuds.containsKey(startStationName)) {
 			ArrayList<String> itinerary = new ArrayList<>();
 			ArrayList<ArrayList<String>> paths = pathsBetweenTwoStation(startStationName, endStationName);
-			if (paths.size()==0) {
+			if (paths.size() == 0) {
 				return null;
 			}
 			for (int i = 0; i < paths.size(); i++) {
@@ -725,67 +722,72 @@ public class Plan {
 		} else
 			return null;
 	}
+
 	/**
-	 * Méhtode permettant de faire le lien entre la station la plus proche de l'utilisateur et la le chemin le plus cours entre cette station et la station d'arrivée
-	 * Tiens en compte le fait de ne pas avoir de chemin possible entre deux station et donc que l'utilisateur doive marcher
-	 * @param posXInitial : position en X de l'utilisateur
-	 * @param posYInitial :  position en Y de l'utilisateur
+	 * Méhtode permettant de faire le lien entre la station la plus proche de
+	 * l'utilisateur et la le chemin le plus cours entre cette station et la station
+	 * d'arrivée
+	 * Tiens en compte le fait de ne pas avoir de chemin possible entre deux station
+	 * et donc que l'utilisateur doive marcher
+	 * 
+	 * @param posXInitial    : position en X de l'utilisateur
+	 * @param posYInitial    : position en Y de l'utilisateur
 	 * @param endStationName : nom de la station d'arrivée
-	 * @param userDemande   : type de parcours demandé
+	 * @param userDemande    : type de parcours demandé
 	 * 
 	 */
 	public void findTheFinalPath(float posXInitial, float posYInitial, String endStationName, String userDemande) {
-		String message ="";
+		String message = "";
 		ArrayList<Station> stationToDodge = new ArrayList<>();
 		boolean end = false;
 		Station endStation = this.noeuds.get(endStationName);
-		while(end==false) {			
-			Station nearestStation = getNearestStation( posXInitial,  posYInitial, new ArrayList<Station>());
+		while (end == false) {
+			Station nearestStation = getNearestStation(posXInitial, posYInitial, new ArrayList<Station>());
 			ArrayList<String> itinerary = new ArrayList<>();
-			switch(userDemande) {
-				case "itineraryFeweLineChanges":
-					 itinerary = itineraryFeweLineChanges(nearestStation.getName(), endStation.getName());					
-					 break;
-				case "starA":
-					itinerary = starA(nearestStation.getName(),  endStation.getName());
+			switch (userDemande) {
+				case "changement":
+					itinerary = itineraryFeweLineChanges(nearestStation.getName(), endStation.getName());
 					break;
-					
-			}			
-			if (itinerary!=null) {	
-				message = "Voici les etapes a suivres : \n"+ "Marcher jusqu'a la station "+nearestStation.getName()+"\n" + shapingPaths(itinerary)+message;
+				case "rapide":
+					itinerary = starA(nearestStation.getName(), endStation.getName());
+					break;
+
+			}
+			if (itinerary != null) {
+				message = "Voici les etapes a suivres : \n" + "Marcher jusqu'a la station " + nearestStation.getName()
+						+ "\n" + shapingPaths(itinerary) + message;
 				System.out.println(message);
 				end = true;
-			}else {
-				ArrayList<Station> oldnearestStation =  new ArrayList<Station>();
+			} else {
+				ArrayList<Station> oldnearestStation = new ArrayList<Station>();
 				oldnearestStation.add(nearestStation);
-				Station newNearestStation = getNearestStation( posXInitial,  posYInitial, oldnearestStation);
+				Station newNearestStation = getNearestStation(posXInitial, posYInitial, oldnearestStation);
 				ArrayList<String> testItinerary = new ArrayList<>();
-				switch(userDemande) {
-					case "itineraryFeweLineChanges":
-						testItinerary = itineraryFeweLineChanges(newNearestStation.getName(), endStation.getName());					
-						 break;
-					case "starA":
-						testItinerary = starA(newNearestStation.getName(),  endStation.getName());
+				switch (userDemande) {
+					case "changement":
+						testItinerary = itineraryFeweLineChanges(newNearestStation.getName(), endStation.getName());
 						break;
-						
-				}			
-				if (testItinerary!=null) {	
-					message = "Voici les etapes a suivres : \n"+ "Marcher jusqu'a la station "+newNearestStation.getName()+"\n" + shapingPaths(testItinerary)+message;
+					case "rapide":
+						testItinerary = starA(newNearestStation.getName(), endStation.getName());
+						break;
+
+				}
+				if (testItinerary != null) {
+					message = "Voici les etapes a suivres : \n" + "Marcher jusqu'a la station "
+							+ newNearestStation.getName() + "\n" + shapingPaths(testItinerary) + message;
 					System.out.println(message);
 					end = true;
+				} else {
+					stationToDodge.add(endStation);
+					endStation = getNearestStation(this.noeuds.get(endStation.getName()).getPositionX(),
+							this.noeuds.get(endStation.getName()).getPositionY(), stationToDodge);
+					// System.out.println(endStation.getName());
+					message = "Pour finir marcher de la station " + endStation.getName() + " jusqu'a la station "
+							+ endStationName;
 				}
-					else {				
-						stationToDodge.add(endStation);
-						endStation = getNearestStation( this.noeuds.get(endStation.getName()).getPositionX(),  this.noeuds.get(endStation.getName()).getPositionY(),stationToDodge );
-						//System.out.println(endStation.getName());
-						message = "Pour finir marcher de la station " + endStation.getName()+" jusqu'a la station "+ endStationName;
-					}
+			}
+
 		}
-		
-		
-		
-		
-	}
 	}
 
 }
