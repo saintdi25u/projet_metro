@@ -200,4 +200,70 @@ public class ControllerCommand {
         }
         return res;
     }
+
+    public void pathWithStep(Scanner s, Plan p, String pref) {
+        System.out.println("Combien d'étape voulez-vous faire ?\n");
+        System.out.println("Vous ne pouvez saisir que 3 étapes maximum\n");
+        int nbStep = 0;
+        try {
+            nbStep = s.nextInt();
+            if (nbStep > 3 || nbStep <= 0) {
+                throw new Exception();
+            }
+        } catch (Exception e) {
+            System.out.println("Veuillez saisir un nombre d'étape valide\n");
+            pathWithStep(s, p, pref);
+        }
+        ArrayList<ArrayList<String>> path = new ArrayList<ArrayList<String>>();
+        switch (pref) {
+            case "rapide" :
+                System.out.println("Veuillez saisir votre station de départ");
+                String departureStation = checkStation(p, s);
+                for (int i = 0; i < nbStep; i++) {
+                    System.out.println("Veuillez saisir votre " + i+1 + "e arrêt");
+                    String step = checkStation(p, s);
+                    path.add(p.starA(departureStation, step));
+                    departureStation = step;
+                }
+                System.out.println("Veuillez saisir votre station de départ");
+                String arrivalStation = checkStation(p, s);
+                path.add(p.starA(departureStation, arrivalStation));
+                break;
+            case "changement":
+                for (int i = 0; i < nbStep; i++) {
+
+                }
+                break;
+        }
+        System.out.println("Voici le trajet que vous devrait emprunter pour ralier les stations demandées :");
+        for (int i = 0; i < nbStep; i++) {
+            System.out.println("Pour aller jusqu'au " + i+1 + "e arrêt");
+            p.shapingPaths(path.get(i));
+        }
+    }
+
+    public String checkStation(Plan p, Scanner s) {
+        String station = s.nextLine();
+        while(p.getNoeuds().get(station) == null){
+            System.out.println("Station invalide");
+            System.out.println("Veuillez saisir votre station de départ");
+            station = s.nextLine();
+        }
+        return station;
+    }
+
+    public void findPath(Scanner s, Plan p, String pref) {
+        System.out.println("Veuillez saisir votre station de départ");
+        String departureStation = checkStation(p, s);
+        System.out.println("Veuillez saisir votre station d'arrivée");
+        String arrivalStation = checkStation(p, s);
+        switch(pref){
+            case "rapide":
+                p.shapingPaths(p.starA(departureStation, arrivalStation));
+                break;
+            case "changement":
+
+                break;
+        }
+    }
 }
