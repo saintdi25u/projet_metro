@@ -224,17 +224,19 @@ public class Plan {
 
 		for (String keyNoeud : this.noeuds.keySet()) {
 			ArrayList<Station> reachStations = new ArrayList<>();
-			for (String keyLineF : this.arcs.keySet()) {
-				if (this.arcs.get(keyLineF).getIncident() == null) {
+			for (String keyLineF : this.arcs.keySet()) {  
+				if (this.arcs.get(keyLineF).getIncident() == null) { // Vérifie si l'arc ne possède pas de station avec incident 
 
-					if (this.arcs.get(keyLineF).getStartStation().getName()
+					if (this.arcs.get(keyLineF).getStartStation().getName() // Vérifie si la station de départ du fragement correspond à la station actuel
 							.equals(this.noeuds.get(keyNoeud).getName())) {
-						if (this.arcs.get(keyLineF).getEndStation().getIncident() == null) {
+						if (this.arcs.get(keyLineF).getEndStation().getIncident() == null) { // Vérifie si la station d'arrivée de l'arc ne possède d'incident
 							reachStations.add(this.arcs.get(keyLineF).getEndStation());
 						}
 
 					}
+					// Vérifie si la station d'arrivée du fragement correspond à la station actuel
 					if (this.arcs.get(keyLineF).getEndStation().getName().equals(this.noeuds.get(keyNoeud).getName())) {
+						// Vérifie si la station de départ de l'arc ne possède pas d'incidente 
 						if (this.arcs.get(keyLineF).getStartStation().getIncident() == null) {
 							reachStations.add(this.arcs.get(keyLineF).getStartStation());
 						}
@@ -350,8 +352,7 @@ public class Plan {
 
 		for (ArrayList<String> path : paths) {
 			ArrayList<LineFragmentation> lines = new ArrayList<>();
-			// On place dans lines les fragments de lignes qui composent le chemin entre les
-			// deux stations
+			// On place dans lines les fragments de lignes qui composent le chemin entre les deux stations		
 			for (int i = 0; i < path.size() - 1; i++) {
 				for (String keyLineF : this.arcs.keySet()) {
 					if (path.get(i).equals(this.arcs.get(keyLineF).getStartStation().getName())
@@ -497,14 +498,16 @@ public class Plan {
 	 * station il faut prendre et sur quelle lignes
 	 * 
 	 * @param path : chemin à mettre en forme
+	 * @return : le chemin mis en forme sous la forme d'un string
 	 */
 	public String shapingPaths(ArrayList<String> path) {
 		ArrayList<Integer> numLines = new ArrayList<>();
 		ArrayList<ArrayList<String>> transformPath = new ArrayList<>();
 
-		for (int i = 0; i < path.size() - 1; i++) {
-			for (String line : this.lines.keySet()) {
-				for (LineFragmentation lineFrag : this.lines.get(line).getFragements()) {
+		for (int i = 0; i < path.size() - 1; i++) {//parcours les chemins
+			for (String line : this.lines.keySet()) {//parcours chaques lignes
+				for (LineFragmentation lineFrag : this.lines.get(line).getFragements()) {//parcours chaques fragement de lignes
+					//test la correspondance avec le fragement de ligne
 					if (path.get(i).equals(lineFrag.getStartStation().getName())
 							&& path.get(i + 1).equals(lineFrag.getEndStation().getName())) {
 						ArrayList<String> stationsGoodOrder = new ArrayList<>();
@@ -529,8 +532,7 @@ public class Plan {
 
 		ArrayList<Integer> finalNumLine = new ArrayList<>();
 		ArrayList<ArrayList<String>> finalTransformPath = new ArrayList<>();
-		System.out.println();
-		for (int i = 0; i < numLines.size(); i++) {
+		for (int i = 0; i < numLines.size(); i++) {// mise en forme du résultat avec les bon fragements de lignes
 			ArrayList<String> startStop = new ArrayList<>();
 
 			String start = transformPath.get(i).get(0);
@@ -563,9 +565,6 @@ public class Plan {
 			result = result + "Prendre la ligne " + finalNumLine.get(i) + " de la station "
 					+ finalTransformPath.get(i).get(0) + " jusqu'a la station " + finalTransformPath.get(i).get(1)
 					+ "\n";
-			// System.out.println(finalNumLine.get(i) + " : " +
-			// finalTransformPath.get(i).get(0) + " "
-			// + finalTransformPath.get(i).get(1));
 		}
 		return result;
 	}
@@ -675,8 +674,9 @@ public class Plan {
 			if (paths.size() == 0) {
 				return null;
 			}
-			for (int i = 0; i < paths.size(); i++) {
+			for (int i = 0; i < paths.size(); i++) {//on regarde tout les chemins entre deux stations
 				for (int j = 0; j < paths.get(i).size(); j++) {
+					//contrôle si des incidents sont présent
 					if (this.noeuds.get(paths.get(i).get(j)).hasIncident()) {
 						paths.remove(i);
 						break;
@@ -699,7 +699,6 @@ public class Plan {
 					LineFragmentation line = findLineFragmentation(path.get(i), path.get(i + 1));
 					numsLine.add(numLine(line));
 				}
-				// suppression des doublons :
 
 				numsLine = findCahngeInThePaths(numsLine);
 				// ajout dans la liste le nombre de changement de ligne pour ce chemin
@@ -717,7 +716,7 @@ public class Plan {
 				}
 			}
 
-			return paths.get(position);
+			return paths.get(position);// retourne le chemin avec le moins de changement de ligne
 
 		} else
 			return null;
@@ -741,7 +740,7 @@ public class Plan {
 		ArrayList<Station> stationToDodge = new ArrayList<>();
 		boolean end = false;
 		Station endStation = this.noeuds.get(endStationName);
-		while (end == false) {
+		while (end == false) {//répétition des instructions tant qu'un intinéraire n'a pas été trouvé
 			Station nearestStation = getNearestStation(posXInitial, posYInitial, new ArrayList<Station>());
 			ArrayList<String> itinerary = new ArrayList<>();
 			switch (userDemande) {
@@ -753,12 +752,12 @@ public class Plan {
 					break;
 
 			}
-			if (itinerary != null) {
+			if (itinerary != null) {// Une fois trouvé, affichage de l'itinéraire
 				message = "Voici les etapes a suivres : \n" + "Marcher jusqu'a la station " + nearestStation.getName()
 						+ "\n" + shapingPaths(itinerary) + message;
 				System.out.println(message);
 				end = true;
-			} else {
+			} else {// s'il n'existe pas d'itinéraire on test en recherchant  en partant de la station la plus proche de la station de départ
 				ArrayList<Station> oldnearestStation = new ArrayList<Station>();
 				oldnearestStation.add(nearestStation);
 				Station newNearestStation = getNearestStation(posXInitial, posYInitial, oldnearestStation);
@@ -772,12 +771,12 @@ public class Plan {
 						break;
 
 				}
-				if (testItinerary != null) {
+				if (testItinerary != null) {// Une fois trouvé, affichage de l'itinéraire
 					message = "Voici les etapes a suivres : \n" + "Marcher jusqu'a la station "
 							+ newNearestStation.getName() + "\n" + shapingPaths(testItinerary) + message;
 					System.out.println(message);
 					end = true;
-				} else {
+				} else {// si toujours aucun itinéraire n'est trouvé on teste en prenant une autre station d'arrivé (proche de celle de base)
 					stationToDodge.add(endStation);
 					endStation = getNearestStation(this.noeuds.get(endStation.getName()).getPositionX(),
 							this.noeuds.get(endStation.getName()).getPositionY(), stationToDodge);
