@@ -62,7 +62,6 @@ public class ControllerCommand {
             res.setIncident(incident);
             System.out.println("Incident créé avec succès sur le fraguement de ligne " + res.getName());
         } catch (Exception e) {
-            // TODO: handle exception
             System.out.println("Cet fraguement de ligne n'existe pas, veulliez choisir une station de la liste");
             initStationIncident(s, plan);
         }
@@ -77,7 +76,6 @@ public class ControllerCommand {
         try {
             choix = s.nextInt();
         } catch (Exception e) {
-            // TODO: handle exception
             System.out.println("Veuillez ne saisir que des chiffres pour les choix de préférences\n");
             saisiPreference(s);
         }
@@ -199,6 +197,14 @@ public class ControllerCommand {
         return res;
     }
 
+    /**
+     * Fonction qui permet de rechercher un itininéraire avec plusieurs étapes
+     * @param s Scanner
+     * @param p Plan
+     * @param pref Preference de trajet de l'utilisateur
+     * @param positionX positionX de l'utilisateur
+     * @param positionY positionY de l'utilisateur
+     */
     public void pathWithStep(Scanner s, Plan p, String pref, Float positionX, Float positionY) {
         System.out.println("Combien d'étape voulez-vous faire ?\n");
         System.out.println("Vous ne pouvez saisir que 3 étapes maximum\n");
@@ -226,6 +232,12 @@ public class ControllerCommand {
         p.findTheFinalPath(x, y, pref, arrivalStation);
     }
 
+    /**
+     * Fonction qui permet de sélectionner et de vérifier qu'une station existe
+     * @param p Plan 
+     * @param s Scanner
+     * @return la station sélectionnée par l'utilisateur
+     */
     public String checkStation(Plan p, Scanner s) {
         String station = s.nextLine();
         while (p.getNoeuds().get(station) == null) {
@@ -236,6 +248,14 @@ public class ControllerCommand {
         return station;
     }
 
+    /**
+     * Fonction qui permet de calculer l'itinéraire vers une station en fonction de la préférence utilisateur
+     * @param s Scanner
+     * @param p Plan
+     * @param pref Préférence utilisateur
+     * @param positionX positionX de l'utilisateur
+     * @param positionY positionY de l'utilisateur
+     */
     public void findPath(Scanner s, Plan p, String pref, Float positionX, Float positionY) {
         System.out.println("Veuillez saisir votre station d'arrivée");
         String arrivalStation = checkStation(p, s);

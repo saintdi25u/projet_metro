@@ -77,10 +77,16 @@ public class App {
 	public void menuUtil(Scanner s, Plan p) {
 		ControllerCommand c = new ControllerCommand();
 		System.out.println("Bienvenue dans le menu utilisateur de l'application");
+		System.out.println("Tout d'abord, il faut vous localiser");
+		setPositionX(c.setPositionXByUser(s, p));
+		System.out.println("Latitude enregistré.");
+		setPositionY(c.setPositionYByUser(s, p));
+		System.out.println("Longitude enregistré.");
+		System.out.println("Voici vos coordonées actuelle : (" + this.positionX + "," + this.positionY + ")");
 		boolean admin = true;
 		while (admin) {
 			System.out.println("Si vous souhaitez saisir vos préférence de trajet, taper 1");
-			System.out.println("Si vous souhaitez vous faire localiser, taper 2");
+			System.out.println("Si vous souhaitez modifier votre localisation, taper 2");
 			System.out.println("Si vous souhaitez effectuer un trajet avec plusieurs étape, taper 3");
 			System.out.println("Si vous souhaitez effectuer un trajet simple, taper 4");
 			System.out.println("Si vous souhaitez sortir du menu utilisateur, taper 5");
