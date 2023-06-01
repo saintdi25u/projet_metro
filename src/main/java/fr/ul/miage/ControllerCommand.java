@@ -29,8 +29,6 @@ public class ControllerCommand {
     public void initStationIncident(Scanner s, Plan plan) {
         Incident incident = createIncident(s);
         System.out.println("Sur quelle station est l'incident ?");
-        // Afficher le nom de toutes les stations
-        System.out.println();
         String station = s.nextLine();
         Station res = null;
         try {
@@ -53,8 +51,6 @@ public class ControllerCommand {
     public void initFragLigneIncident(Scanner s, Plan plan) {
         Incident incident = createIncident(s);
         System.out.println("Sur quelle fraguement de ligne est l'incident ?");
-        // Afficher le nom de tous les fraguement de ligne
-        System.out.println();
         String fragLigne = s.nextLine();
         LineFragmentation res = null;
         try {
@@ -72,14 +68,14 @@ public class ControllerCommand {
         System.out.println("Voici les choix de preference qui s'offrent à vous : \n");
         System.out.println("Taper 1 pour chercher les itineraires les plus rapides\n");
         System.out.println("Taper 2 pour chercher les itineraires avec le moins de changement de ligne\n");
-        int choix = 0;
+        int choice = 0;
         try {
-            choix = s.nextInt();
+            choice = Integer.parseInt(s.nextLine());
         } catch (Exception e) {
             System.out.println("Veuillez ne saisir que des chiffres pour les choix de préférences\n");
             saisiPreference(s);
         }
-        switch (choix) {
+        switch (choice) {
             case 1:
                 preference = "rapide";
                 break;
@@ -110,6 +106,9 @@ public class ControllerCommand {
         if (p.getLines().containsKey(numLine)) {
             showIncidentOnLineFragmentationInLine(numLine, p);
             showIncidentOnStaionsInLine(numLine, p);
+        } else {
+            System.out.println("Veuillez rentrer une ligne valide");
+            showIncidentsOnLine(s, p);
         }
     }
 
@@ -169,8 +168,11 @@ public class ControllerCommand {
         float result = 0;
         try {
             result = s.nextFloat();
+            if (result < 0 || result > Float.MAX_VALUE) {
+                throw new IllegalArgumentException("Veuillez renseigner un nombre valide");
+            }
         } catch (Exception e) {
-            System.out.println("Erreur, Veuillez rentrer un nombre");
+            System.out.println("Erreur, Veuillez rentrer un nombre valide");
             setPositionByUser(s, axis);
         }
         return result;
@@ -199,30 +201,30 @@ public class ControllerCommand {
      * @param positionY positionY de l'utilisateur
      */
     public void pathWithStep(Scanner s, Plan p, String pref, Float positionX, Float positionY) {
-        System.out.println("Combien d'étape voulez-vous faire ?\n");
-        System.out.println("Vous ne pouvez saisir que 3 étapes maximum\n");
+        System.out.println("Combien d'étape voulez-vous faire ?");
+        System.out.println("Vous ne pouvez saisir que 3 étapes maximum");
         int nbStep = 0;
         try {
-            nbStep = s.nextInt();
+            nbStep = Integer.parseInt(s.nextLine());
             if (nbStep > 3 || nbStep <= 0) {
                 throw new Exception();
             }
         } catch (Exception e) {
-            System.out.println("Veuillez saisir un nombre d'étape valide\n");
+            System.out.println("Veuillez saisir un nombre d'étape valide");
             pathWithStep(s, p, pref, positionX, positionY);
         }
         float x = positionX;
         float y = positionY;
         for (int i = 0; i < nbStep; i++) {
-            System.out.println("Veuillez saisir votre " + i + 1 + "e arrêt");
+            System.out.println("Veuillez saisir votre " + (i+1) + "e arrêt");
             String step = checkStation(p, s);
-            p.findTheFinalPath(x, y, pref, step);
+            p.findTheFinalPath(x, y, step, pref);
             x = p.getNoeuds().get(step).getPositionX();
             y = p.getNoeuds().get(step).getPositionY();
         }
-        System.out.println("Veuillez saisir votre station de départ");
+        System.out.println("Veuillez saisir votre station d'arrivée");
         String arrivalStation = checkStation(p, s);
-        p.findTheFinalPath(x, y, pref, arrivalStation);
+        p.findTheFinalPath(x, y, arrivalStation, pref);
     }
 
     /**
@@ -235,7 +237,7 @@ public class ControllerCommand {
         String station = s.nextLine();
         while (p.getNoeuds().get(station) == null) {
             System.out.println("Station invalide");
-            System.out.println("Veuillez saisir votre station de départ");
+            System.out.println("Veuillez saisir une station valide"); 
             station = s.nextLine();
         }
         return station;
@@ -252,6 +254,7 @@ public class ControllerCommand {
     public void findPath(Scanner s, Plan p, String pref, Float positionX, Float positionY) {
         System.out.println("Veuillez saisir votre station d'arrivée");
         String arrivalStation = checkStation(p, s);
-        p.findTheFinalPath(positionX, positionY, pref, arrivalStation);
+        p.findTheFinalPath(positionX, positionY, arrivalStation, pref);
+        //System.out.println(message);
     }
 }

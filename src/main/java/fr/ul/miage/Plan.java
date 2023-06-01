@@ -757,6 +757,7 @@ public class Plan {
 						+ "\n" + shapingPaths(itinerary) + message;
 				System.out.println(message);
 				end = true;
+				//return message;
 			} else {// s'il n'existe pas d'itinéraire on test en recherchant  en partant de la station la plus proche de la station de départ
 				ArrayList<Station> oldnearestStation = new ArrayList<Station>();
 				oldnearestStation.add(nearestStation);
@@ -776,6 +777,7 @@ public class Plan {
 							+ newNearestStation.getName() + "\n" + shapingPaths(testItinerary) + message;
 					System.out.println(message);
 					end = true;
+					//return message;
 				} else {// si toujours aucun itinéraire n'est trouvé on teste en prenant une autre station d'arrivé (proche de celle de base)
 					stationToDodge.add(endStation);
 					endStation = getNearestStation(this.noeuds.get(endStation.getName()).getPositionX(),
@@ -785,8 +787,8 @@ public class Plan {
 							+ endStationName;
 				}
 			}
-
 		}
+		//return message;
 	}
 
 }

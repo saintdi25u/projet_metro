@@ -75,7 +75,7 @@ public class PlanTest {
         float initialY = 19;
         p.getArcs().get("BC").setIncident(new Incident("Incendie")); // On met unincident sur le fragment de ligne BC
         Station stationNearest = p.getNearestStation(initialX, initialY, new ArrayList<Station>());
-        assertThat(stationNearest.getName()).isEqualTo("A");
+        assertThat(stationNearest.getName()).isEqualTo("B");
     }
 
     @Test

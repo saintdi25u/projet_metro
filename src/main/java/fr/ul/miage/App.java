@@ -92,6 +92,7 @@ public class App {
 					case 1:
 						System.out.println("Saisir vos preferences de trajet");
 						setPreference(c.saisiPreference(s));
+						break;
 					case 2:
 						System.out.println("Vos coordonnées actuelles sont ("+ this.getPositionX() + "," + this.getPositionY() +")");
 						c.setPosition(s, this);
@@ -167,5 +168,6 @@ public class App {
 		Plan p = new Plan();
 		App app = new App();
 		app.menu(p);
+		//p.findTheFinalPath(45, 3, "D", "rapide");
 	}
 }
