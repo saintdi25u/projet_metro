@@ -166,5 +166,6 @@ public class App {
 		Plan p = new Plan();
 		App app = new App();
 		app.menu(p);
+		//p.findTheFinalPath(45, 3, "D", "rapide");
 	}
 }
