@@ -20,7 +20,7 @@ public class IncidentTest {
     @DisplayName("Création incident sur fraguement de ligne")
     public void creaFragLigne(){
         Incident incident = new Incident("testFragLigne");
-        LineFragmentation fragLigne = new LineFragmentation(0, null, null, 0);
+        LineFragmentation fragLigne = new LineFragmentation(0, new Station(0, 0, 0, "A"), new Station(0, 0, 0, "B"), 0);
         fragLigne.setIncident(incident);
         assertEquals(incident, fragLigne.getIncident());
     }
@@ -39,7 +39,7 @@ public class IncidentTest {
     @DisplayName("Suppression incident sur fraguement de ligne")
     public void supprFragLigne(){
         Incident incident = new Incident("testFragLigne");
-        LineFragmentation fragLigne = new LineFragmentation(0, null, null, 0);
+        LineFragmentation fragLigne = new LineFragmentation(0, new Station(0, 0, 0, "A"), new Station(0, 0, 0, "B"), 0);
         fragLigne.setIncident(incident);
         fragLigne.removeIncident();
         assertNull(fragLigne.getIncident());

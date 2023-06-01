@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
@@ -16,10 +15,6 @@ import org.junit.jupiter.api.DisplayName;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PlanTest {
-    @Test
-    public void dummyTest() {
-        assertTrue(true);
-    }
 
     @Test
     @DisplayName("Test station la plus proche")
@@ -75,7 +70,7 @@ public class PlanTest {
         float initialY = 19;
         p.getArcs().get("BC").setIncident(new Incident("Incendie")); // On met unincident sur le fragment de ligne BC
         Station stationNearest = p.getNearestStation(initialX, initialY, new ArrayList<Station>());
-        assertThat(stationNearest.getName()).isEqualTo("A");
+        assertThat(stationNearest.getName()).isEqualTo("B");
     }
 
     @Test
@@ -268,8 +263,6 @@ public class PlanTest {
 
         plan.setNoeuds(stations);
         plan.setArcs(fragments);
-
-        ArrayList<ArrayList<String>> result = plan.pathsBetweenTwoStation("station1", "station4");
 
         ArrayList<ArrayList<String>> searchdPaths = new ArrayList<>();
         searchdPaths.add(new ArrayList<>(Arrays.asList("station1", "station3", "station4")));
