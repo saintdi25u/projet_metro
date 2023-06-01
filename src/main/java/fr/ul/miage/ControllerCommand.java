@@ -156,45 +156,38 @@ public class ControllerCommand {
     }
 
     /**
-     * Méthode permettant de demander à l'utilisateur de rentré sa coordonées X
+     * Méthode permettant de demander à l'utilisateur de rentrer sa coordonées X ou Y
      * 
      * @param s le scanner
-     * @param p le plan
+     * @param String lattitude ou longitude selon le besoin
      * @return la latitude rentré par l'utilisateur
      */
 
-    public float setPositionXByUser(Scanner s, Plan p) {
-        System.out.println("Veuillez rentrer votre latitude.");
+    public float setPositionByUser(Scanner s, String axis) {
+        System.out.println("Veuillez rentrer votre "+ axis + ".");
         s = new Scanner(System.in);
         float result = 0;
         try {
             result = s.nextFloat();
         } catch (Exception e) {
             System.out.println("Erreur, Veuillez rentrer un nombre");
-            setPositionXByUser(s, p);
+            setPositionByUser(s, axis);
         }
         return result;
 
     }
 
     /**
-     * Méthode permettant de demander à l'utilisateur de rentré sa coordonées Y
-     * 
+     * Fonction permettant de mettre en place la postion de l'utilisateur 
      * @param s le scanner
-     * @param p le plan
-     * @return la longitude rentré par l'utilisateur
+     * @param a classe application du programme
      */
-    public float setPositionYByUser(Scanner s, Plan p) {
-        System.out.println("Veuillez rentrer votre longitude.");
-        s = new Scanner(System.in);
-        float res = 0;
-        try {
-            res = s.nextFloat();
-        } catch (Exception e) {
-            System.out.println("Erreur, veuillez rentrer un nombre");
-            setPositionYByUser(s, p);
-        }
-        return res;
+    public void setPosition(Scanner s, App a) {
+        a.setPositionX(setPositionByUser(s, "lattitude"));
+		System.out.println("Latitude enregistré.");
+		a.setPositionY(setPositionByUser(s, "longitude"));
+		System.out.println("Longitude enregistré.");
+		System.out.println("Voici vos coordonées actuelle : (" + a.getPositionX() + "," + a.getPositionY() + ")");
     }
 
     /**

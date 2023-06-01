@@ -78,11 +78,7 @@ public class App {
 		ControllerCommand c = new ControllerCommand();
 		System.out.println("Bienvenue dans le menu utilisateur de l'application");
 		System.out.println("Tout d'abord, il faut vous localiser");
-		setPositionX(c.setPositionXByUser(s, p));
-		System.out.println("Latitude enregistré.");
-		setPositionY(c.setPositionYByUser(s, p));
-		System.out.println("Longitude enregistré.");
-		System.out.println("Voici vos coordonées actuelle : (" + this.positionX + "," + this.positionY + ")");
+		c.setPosition(s, this);
 		boolean admin = true;
 		while (admin) {
 			System.out.println("Si vous souhaitez saisir vos préférence de trajet, taper 1");
@@ -97,12 +93,8 @@ public class App {
 						System.out.println("Saisir vos preferences de trajet");
 						setPreference(c.saisiPreference(s));
 					case 2:
-						setPositionX(c.setPositionXByUser(s, p));
-						System.out.println("Latitude enregistré.");
-						setPositionY(c.setPositionYByUser(s, p));
-						System.out.println("Longitude enregistré.");
-						System.out.println(
-								"Voici vos coordonées actuelle : (" + this.positionX + "," + this.positionY + ")");
+						System.out.println("Vos coordonnées actuelles sont ("+ this.getPositionX() + "," + this.getPositionY() +")");
+						c.setPosition(s, this);
 						break;
 					case 3:
 						c.pathWithStep(s, p, preference, this.positionX, this.positionY);
@@ -172,27 +164,8 @@ public class App {
 	}
 
 	public static void main(String[] args) {
-
 		Plan p = new Plan();
-
-
 		App app = new App();
 		app.menu(p);
-
-
-//		ArrayList<String> a = p.itineraryFeweLineChanges("T", "E");
-//		if (a==null) {
-//			System.out.println("oui");
-//		}else {
-//			
-//			p.shapingPaths(a);
-//		
-//		}
-////	
-		//Incident i = new Incident("test");
-		//p.getArcs().get("CD").setIncident(i);
-		p.findTheFinalPath(21,3,"R", "itineraryFeweLineChanges");
-		//p.shapingPaths(a);
-
 	}
 }
