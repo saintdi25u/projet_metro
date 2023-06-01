@@ -235,11 +235,11 @@ public class ControllerCommand {
      * @return la station sélectionnée par l'utilisateur
      */
     public String checkStation(Plan p, Scanner s) {
-        String station = s.nextLine();
+        String station = s.nextLine().toUpperCase();
         while (p.getNoeuds().get(station) == null) {
             System.out.println("Station invalide");
             System.out.println("Veuillez saisir une station valide"); 
-            station = s.nextLine();
+            station = s.nextLine().toUpperCase();
         }
         return station;
     }

@@ -695,7 +695,7 @@ public class Plan {
 				}
 			}
 
-			ArrayList<Integer> numChangements = new ArrayList<>();
+			ArrayList<Integer> numChanges = new ArrayList<>();
 			for (ArrayList<String> path : paths) {
 				ArrayList<Integer> numsLine = new ArrayList<>();
 				for (int i = 0; i < path.size() - 1; i++) {
@@ -705,16 +705,16 @@ public class Plan {
 
 				numsLine = findCahngeInThePaths(numsLine);
 				// ajout dans la liste le nombre de changement de ligne pour ce chemin
-				numChangements.add(numsLine.size());
+				numChanges.add(numsLine.size());
 
 			}
 
 			int position = 0;
-			int smallestElement = numChangements.get(0);
+			int smallestElement = numChanges.get(0);
 
-			for (int i = 1; i < numChangements.size(); i++) {
-				if (numChangements.get(i) < smallestElement) {
-					smallestElement = numChangements.get(i);
+			for (int i = 1; i < numChanges.size(); i++) {
+				if (numChanges.get(i) < smallestElement) {
+					smallestElement = numChanges.get(i);
 					position = i;
 				}
 			}
@@ -793,7 +793,6 @@ public class Plan {
 				}
 			}
 		}
-		//return message;
 	}
 
 }
