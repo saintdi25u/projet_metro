@@ -60,7 +60,6 @@ public class App {
 						break;
 				}
 			} catch (Exception e) {
-				// TODO: handle exception
 				System.out.println(
 						"Veuillez saisir les numéros 1, 2 ou 3 pour accéder aux fonctionnalités de l'application");
 				menu(p);
@@ -92,6 +91,7 @@ public class App {
 					case 1:
 						System.out.println("Saisir vos preferences de trajet");
 						setPreference(c.saisiPreference(s));
+						break;
 					case 2:
 						System.out.println("Vos coordonnées actuelles sont ("+ this.getPositionX() + "," + this.getPositionY() +")");
 						c.setPosition(s, this);
@@ -111,7 +111,6 @@ public class App {
 						break;
 				}
 			} catch (Exception e) {
-				// TODO: handle exception
 				System.out.println(
 						"Veuillez saisir les numéros 1, 2 ou 3 pour accéder aux fonctionnalités de l'application");
 				menuUtil(s, p);
