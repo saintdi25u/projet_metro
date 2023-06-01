@@ -156,10 +156,10 @@ public class ControllerCommand {
     }
 
     /**
-     * Méthode permettant de demander à l'utilisateur de rentré sa coordonées X
+     * Méthode permettant de demander à l'utilisateur de rentrer sa coordonées X ou Y
      * 
      * @param s le scanner
-     * @param p le plan
+     * @param String lattitude ou longitude selon le besoin
      * @return la latitude rentré par l'utilisateur
      */
 
@@ -177,6 +177,11 @@ public class ControllerCommand {
 
     }
 
+    /**
+     * Fonction permettant de mettre en place la postion de l'utilisateur 
+     * @param s le scanner
+     * @param a classe application du programme
+     */
     public void setPosition(Scanner s, App a) {
         a.setPositionX(setPositionByUser(s, "lattitude"));
 		System.out.println("Latitude enregistré.");
